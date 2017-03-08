@@ -6,7 +6,7 @@ project(${PROJECTNAME})
 
 INCLUDE(FindPkgConfig)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-set(LUA_LIBRARY "/usr/lib/liblua.so;dl")
+#set(LUA_LIBRARY "/usr/lib/liblua.so;dl")
 find_package(SDL2 REQUIRED)
 find_package(Lua REQUIRED)
 find_package(SDL2_image REQUIRED)

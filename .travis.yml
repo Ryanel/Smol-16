@@ -1,0 +1,16 @@
+sudo: false
+language: cpp
+script: cmake
+
+addons:
+    apt:
+        packages:
+        - cmake
+        - time
+        - libsdl2-dev
+        - libsdl2-image-dev
+        - lua5.2
+
+compiler:
+  - clang
+  - gcc

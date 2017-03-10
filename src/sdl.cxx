@@ -126,7 +126,7 @@ void SDLRenderer::LoadFont() {
     }
     Memory * mem = Memory::instance();
     for (uint32_t i = 0; i < index; i++) {
-        mem->Poke8(0x1000 + i, buffer[i]);
+        mem->Poke8(MEM_VRAM_FONT + i, buffer[i]);
     }
     _logger->info("Font loaded from data/font.png");
 }

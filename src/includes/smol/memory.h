@@ -9,6 +9,7 @@
 #define MEM_VRAM_SPT 0x1E200
 #define MEM_VRAM_BG0 0x1EA00
 #define MEM_VRAM_SAT 0x1EE00
+#define MEM_VRAM_FONT 0x1F000
 //TODO: I still have a whole 0x1000 here!
 #define MEM_VRAM_REGISTER_BASE 0x1FF00
 #define MEM_VRAM_SPRITES 0x20000

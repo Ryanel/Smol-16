@@ -15,7 +15,7 @@ void Smol16::Init() {
     mem = Memory::instance();
     display = Display::instance();
     input = Input::instance();
-    lua->Load("data/std.lua");
+    lua->Load("data/std/std.lua");
     //lua_sethook(lua->_l, &Smol16::LuaHook, LUA_MASKCOUNT, 100);
 }
 
@@ -28,9 +28,9 @@ void Smol16::LuaHook(lua_State *L, lua_Debug *ar) {
     }
 }
 
-void Smol16::Call(const char * func) {
+void Smol16::Call(std::string func) {
     try {
-        (*lua)[func]();
+        (*lua)[func.c_str()]();
     } catch (...) {
         stat_failedcalls++;
     }
@@ -44,11 +44,16 @@ bool Smol16::CheckRender() {
     return shouldRender;
 }
 
-void Smol16::LoadCart(const char * location) {
+void Smol16::LoadCart(std::string location) {
+    cartPath = location;
+    std::string code_path = location + "/main.lua";
+    LoadFile(code_path);
+}
+
+void Smol16::LoadFile(std::string location) {
     try {
         lua->Load(location);
     } catch(...) {
 
     }
-
 }

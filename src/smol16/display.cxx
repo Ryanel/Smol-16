@@ -38,8 +38,8 @@ Display::Display() {
     pixels = new color_t[width * height]; // Framebuffer of RGBA8888 pixel data.
     sys->Register("screenWidth", width);
     sys->Register("screenHeight", height);
-    sys->Register("cls", Display::Lua_Clear);
-    sys->Register("pal_reset", Display::Lua_PaletteReset);
+    sys->Register("screen_clear", Display::Lua_Clear);
+    sys->Register("palette_reset", Display::Lua_PaletteReset);
     sys->Register("_to_bgr", Display::Lua_RGBToBGR15);
 }
 

@@ -160,9 +160,9 @@ function intersection(l, r, b)
 end
 
 function _init()
-    cls()
-    pal()
-    color(1)
+    screen_clear()
+    palette_reset()
+    set_color(1)
 end
 
 function _update()
@@ -174,28 +174,29 @@ function _update()
 end
 
 function drawshape(s)
-  rect(floor(s.x)  , floor(s.y),
+  draw_rect(floor(s.x)  , floor(s.y),
            floor(s.x+4), floor(s.y+s.h))
 end
 
 function _draw()
-    cls()
-    color(12)
+    screen_clear()
+    set_color(12)
     drawshape(l)
-    color(10)
+    set_color(10)
     drawshape(r)
-    color(8)
+    set_color(8)
     drawshape(b)
 
     -- draw the dotted line in
     -- the middle of the field
-    color(6)
+    set_color(6)
     for i=0,64 do
-      rect(127  , 1 + i*5  ,
+      draw_rect(127  , 1 + i*5  ,
                127+2, i*5+3)
     end
-
-    draw_string(l.score, l.x + 5, 5)
-    draw_string(r.score, r.x - 5, 5)
+    set_color(12)
+    draw_string(l.score, l.x + 5, 5, 4)
+    set_color(10)
+    draw_string(r.score, r.x - 14, 5, 4)
     flip()
 end

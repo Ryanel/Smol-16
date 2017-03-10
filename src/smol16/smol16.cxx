@@ -37,9 +37,9 @@ void Smol16::Call(const char * func) {
 }
 
 bool Smol16::CheckRender() {
-    bool shouldRender = mem->Peek8(0x1FF00) > 0;
+    bool shouldRender = mem->Peek8(MEM_VRAM_REGISTER_BASE + 0x0) > 0;
     if(shouldRender) {
-        mem->Poke8(0x1FF00, 0x0);
+        mem->Poke8(MEM_VRAM_REGISTER_BASE + 0x0, 0x0);
     }
     return shouldRender;
 }

@@ -21,7 +21,7 @@ void SDLRenderer::Init() {
         exit(1);
 	}
 	win = SDL_CreateWindow("Smol-16", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        Display::width * 2, Display::height * 2, SDL_WINDOW_SHOWN);
+        Display::width * 1, Display::height * 1, SDL_WINDOW_SHOWN);
     ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     display = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, Display::width, Display::height);
     _logger->info("Initialised");

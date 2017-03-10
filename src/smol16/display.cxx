@@ -4,6 +4,7 @@
 #include <smol/display.h>
 #include <smol/smol16.h>
 #include <font.h>
+
 const uint8_t defaultPalette[256 * 3] = {
     //R    G     B
     0X00,0X00,0X00,
@@ -24,6 +25,7 @@ const uint8_t defaultPalette[256 * 3] = {
     0xFF,0xCC,0xAA
 };
 
+
 Display * Display::m_instance;
 
 Display * Display::instance()
@@ -36,28 +38,54 @@ Display::Display() {
     pixels = new color_t[width * height]; // Framebuffer of RGBA8888 pixel data.
     sys->Register("screenWidth", width);
     sys->Register("screenHeight", height);
-    sys->Register("cls", Display::LuaClear);
+    sys->Register("cls", Display::Lua_Clear);
+    sys->Register("pal_reset", Display::Lua_PaletteReset);
+    sys->Register("_to_bgr", Display::Lua_RGBToBGR15);
 }
 
 void Display::Clear() {
     memset(pixels, 0, width * height * sizeof(color_t));
-    memset(Memory::instance()->ram + VRAM_BASE, 0, width * height);
+    memset(Memory::instance()->ram + MEM_VRAM, 0, width * height);
 }
 
-void Display::LuaClear() {
-    instance()->Clear();
+void Display::PaletteReset() {
+    Memory * m = Memory::instance();
+    int pal_index = 0; // + 1
+    int arr_index = 0; // + 3
+
+    for(int pal_index = 0; pal_index < 256; pal_index++) {
+        // Convert RGB into BGR15
+        uint8_t cr = defaultPalette[arr_index++];
+        uint8_t cg = defaultPalette[arr_index++];
+        uint8_t cb = defaultPalette[arr_index++];
+
+        m->Poke16(MEM_VRAM_PCT + (pal_index * 2), Color::BGR15FromRGB(cr,cg,cb));
+
+    }
 }
+
 color_t * Display::Render() {
     Memory * mem = Memory::instance();
-
     //TODO: Cache Palette
     color_t palette[256];
+
     for(int i = 0; i < 256; i++) {
-        int pi = mem->Peek8(PALETTE_BASE + i);
-        palette[i] = Color::RGBAFromRGB(defaultPalette[(pi * 3) + 0],defaultPalette[(pi * 3) + 1],defaultPalette[(pi * 3) + 2]);
+        // Convert BRG15 to RGB
+        uint16_t c = mem->Peek16(MEM_VRAM_PCT + (i * 2));
+        palette[i] = Color::RGBAFromBGR15(c);
     }
+
     for (size_t i = 0; i < width * height; i++) {
-        pixels[i] = palette[mem->Peek8(i + VRAM_BASE)];
+        pixels[i] = palette[mem->Peek8(i + MEM_VRAM)];
     }
     return pixels;
+}
+int Display::Lua_RGBToBGR15(int r, int g, int b) {
+    return Color::BGR15FromRGB(r,g,b);
+}
+void Display::Lua_Clear() {
+    instance()->Clear();
+}
+void Display::Lua_PaletteReset() {
+    instance()->PaletteReset();
 }

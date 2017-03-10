@@ -1,4 +1,4 @@
-#define CONFIG_RAMSIZE  0x20000 // 32kb
+#define CONFIG_RAMSIZE  0x28000 // 32kb
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 224
 

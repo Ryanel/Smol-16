@@ -4,8 +4,6 @@
 #include <vector>
 #include <color.h>
 #include <config.h>
-const int PALETTE_BASE = 0x1F000;
-const int VRAM_BASE = 0x10000;
 
 class Display {
 private:
@@ -19,6 +17,11 @@ public:
     color_t * pixels;
     // Methods
     void Clear();
+    void PaletteReset();
+
+
     color_t * Render();
-    static void LuaClear();
+    static void Lua_Clear();
+    static void Lua_PaletteReset();
+    static int Lua_RGBToBGR15(int r, int g, int b) ;
 };

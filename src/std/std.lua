@@ -2,9 +2,9 @@
 -- Setup the enviroment
 
 local memory_map = {
-    sprite = 0x0,
+    sprite = 0x20000,
     vram = 0x10000,
-    palette = 0x1F000,
+    palette = 0x1E000,
     kernal_draw_color = 0x1F300,
     kernal_pos_x = 0x1F301,
     kernal_pos_y = 0x1F302,
@@ -189,27 +189,16 @@ function sprite(n, x0, y0, w, h, fx, fy)
         y = y + 1
     end
 end
+function pal()
+    pal_reset()
+end
 
-function pal(dest, src)
-    -- Reset if no arguments
-    if(dest == nil and src == nil) then
-        local i = 0
-        repeat
-            poke8(i + memory_map.palette, i)
-            i = i + 1
-        until i > 0xFF
-        return
-    end
-
-    poke8(dest + memory_map.palette, src)
+function pct_edit(index,r,g,b)
+    local color = _to_bgr(floor(r),floor(g),floor(b))
+    poke16(0x1E000 + (index * 2), color)
 end
 
 function color (color) poke8(memory_map.kernal_draw_color, color) end
-
-function camera (x, y)
-    poke8(memory_map.kernal_pos_x, x)
-    poke8(memory_map.kernal_pos_y, y)
-end
 
 -- Define exection enviroment
 _ENV = {
@@ -227,6 +216,7 @@ _ENV = {
     -- STD functions
     color = color,
     pal = pal,
+    pal_reset = pal_reset,
     pset = pset,
     pset_raw = pset_raw,
     draw_char = draw_char,
@@ -235,5 +225,8 @@ _ENV = {
     hasbit = hasbit,
     _rng_seed = _rng_seed,
     -- Math
-    floor = floor
+    floor = floor,
+
+    -- Utils
+    _to_bgr = _to_bgr
 }

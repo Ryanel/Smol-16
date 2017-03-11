@@ -22,10 +22,14 @@ void SDLRenderer::Init() {
         exit(1);
 	}
 	win = SDL_CreateWindow("Smol-16", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        Display::width * 3, Display::height * 3, SDL_WINDOW_SHOWN);
+        Display::width * Display::scale, Display::height * Display::scale,
+        SDL_WINDOW_SHOWN);
     ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     display = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, Display::width, Display::height);
+    SDL_ShowCursor(SDL_DISABLE);
+
     _logger->info("Initialised");
+
 }
 
 void SDLRenderer::Cleanup() {
@@ -152,5 +156,8 @@ void SDLRenderer::EventLoop() {
         input->SetButton(BUTTON_B, keys[SDL_SCANCODE_X]);
         input->SetButton(BUTTON_X, keys[SDL_SCANCODE_A]);
         input->SetButton(BUTTON_Y, keys[SDL_SCANCODE_S]);
+
+        input->SetButton(BUTTON_LMB, (SDL_GetMouseState(&input->mouseX,
+                         &input->mouseY) & SDL_BUTTON(SDL_BUTTON_LEFT)) > 0);
     }
 }

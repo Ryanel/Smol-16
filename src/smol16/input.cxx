@@ -14,6 +14,8 @@ Input * Input::instance()
 Input::Input() {
     sys->Register("btn", &Input::LuaGetBtnDown);
     sys->Register("btnp", &Input::LuaGetBtnPress);
+    sys->Register("_get_mouse_x", &Input::LuaGetMouseX);
+    sys->Register("_get_mouse_y", &Input::LuaGetMouseY);
 }
 
 // Is the button down NOW?
@@ -37,7 +39,7 @@ bool Input::SetButton(int code, bool value) {
 
 // Cycle from buttonStates -> buttonStatesLast.
 void Input::Update() {
-    for(int i = 0; i < 8; i++) {
+    for(int i = 0; i < NUM_BUTTONS; i++) {
         buttonStatesLast[i] = buttonStates[i];
     }
 }
@@ -47,4 +49,20 @@ bool Input::LuaGetBtnDown(int code) {
 }
 bool Input::LuaGetBtnPress(int code) {
     return instance()->GetButtonPress(code);
+}
+
+int Input::LuaGetMouseX() {
+    return instance()->mouseX / Display::scale;
+}
+
+int Input::LuaGetMouseY() {
+    return instance()->mouseY / Display::scale;
+}
+
+bool Input::LuaGetMouseBtn1() {
+    return false;
+}
+
+bool Input::LuaGetMouseBtn2() {
+    return false;
 }

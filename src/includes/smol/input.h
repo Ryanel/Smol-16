@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cstdint>
 #include <cstddef>
 
@@ -11,13 +12,15 @@
 #define BUTTON_X 6
 #define BUTTON_Y 7
 #define BUTTON_START 8
+#define BUTTON_LMB 9
+#define NUM_BUTTONS 10
 
 class Input {
 private:
     static Input * m_instance;
     Input();
-    bool buttonStates[8];
-    bool buttonStatesLast[8];
+    bool buttonStates[NUM_BUTTONS];
+    bool buttonStatesLast[NUM_BUTTONS];
 public:
     static Input *instance();
     // Last keyboard keycode entered.
@@ -29,4 +32,12 @@ public:
 
     static bool LuaGetBtnDown(int code);
     static bool LuaGetBtnPress(int code);
+
+    int mouseX = 0;
+    int mouseY = 0;
+
+    static int LuaGetMouseX();
+    static int LuaGetMouseY();
+    static bool LuaGetMouseBtn1();
+    static bool LuaGetMouseBtn2();
 };

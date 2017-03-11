@@ -18,18 +18,32 @@ function _init()
     screen_clear()
     palette_reset() -- Resets Palette
     poke16(0x1E000 + (255 * 2), 0xABCDEF)
+
+
+end
+
+function enforce_limits()
+    if (selected_color < 0) then selected_color = 0 end
+    if (selected_color > 255) then selected_color = 255 end
+end
+
+function update_input()
+    cursor.x = _get_mouse_x()
+    cursor.y = _get_mouse_y()
+
 end
 
 function _update()
-    if btn(4) then selected_color = selected_color + 1 end
-    if btn(5) then selected_color = selected_color - 1 end
+    update_input()
+    if btn(9) and cursor.y > 200 and cursor.y < 216 then -- Palette selection
+        local pal_x = floor((cursor.x) / 4)
+        local pal_y = floor((cursor.y - 200) / 4)
+        selected_color = floor(pal_y * 64 + pal_x)
+    end
 
-    -- Enforce limits
-
-    if (selected_color < 0) then selected_color = 0 end
-    if (selected_color > 255) then selected_color = 255 end
 
     global_timer = global_timer + 1
+    enforce_limits()
 end
 
 function draw_palette()
@@ -62,12 +76,23 @@ end
 
 function _draw()
     screen_clear()
+    -- Draw UI bars
     set_color(12)
     draw_rect(0,0, 256, 8)
     draw_rect(0,224 - 8, 256, 224)
-    set_color(selected_color)
-    draw_string("Selected color:" .. selected_color, 8,224 - 7)
+    set_color(7)
+    draw_string("Sprite Editor (no file)" , 8,224 - 7)
     draw_string("X:" .. cursor.x .. " ; Y:" .. cursor.y, 8, 1)
+    -- Draw Palette
+    set_color(13)
+    draw_rect(0,224 - 32, 256, (224 - 32) + 8)
+    set_color(7)
+    draw_string("Palette (" .. selected_color .. ")", 8,224 - 31)
+
     draw_palette()
+
+    draw_rect(cursor.x,cursor.y, cursor.x + 2, cursor.y + 2)
+    draw_rect(cursor.x + 1,cursor.y + 1, cursor.x + 3, cursor.y + 3)
+    draw_rect(cursor.x + 2,cursor.y + 2, cursor.x + 4, cursor.y + 4)
     flip()
 end

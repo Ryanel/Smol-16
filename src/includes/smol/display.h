@@ -12,6 +12,7 @@ private:
 public:
     static const int width = SCREEN_WIDTH; // 256
     static const int height = SCREEN_HEIGHT; // 224
+    static int scale;
     static Display *instance();
 
     color_t * pixels;

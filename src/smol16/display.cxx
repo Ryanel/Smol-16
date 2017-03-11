@@ -27,7 +27,7 @@ const uint8_t defaultPalette[256 * 3] = {
 
 
 Display * Display::m_instance;
-
+int Display::scale = 3;
 Display * Display::instance()
 {
    if(!m_instance) {m_instance = new Display();}

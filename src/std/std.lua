@@ -8,5 +8,3 @@ _std_version = 1
 dofile("data/std/math.lua")
 dofile("data/std/memory.lua")
 dofile("data/std/graphics.lua")
-
-set_pixel(1,1,2)

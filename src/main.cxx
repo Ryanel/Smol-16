@@ -57,15 +57,17 @@ int main (int argc, char *argv[]) {
         exit(0);
     }
 
+    std::string file;
+
     if (options.count("input")) { // Get cart name
         main->info("Loading cart {}",options["input"].as<std::string>());
+        file = options["input"].as<std::string>();
     } else {
-        main->error("No cart to load!");
-        exit(1);
+        file = "carts/shell";
     }
 
     Init();
-    sys->LoadCart(options["input"].as<std::string>().c_str());
+    sys->LoadCart(file);
     // Enter the main loop!
     MainLoop();
     // And now cleanup.

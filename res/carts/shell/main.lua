@@ -32,8 +32,8 @@ end
 
 -- System callback functions
 function _init()
-    cls()
-    pal()
+    screen_clear()
+    palette_reset()
 end
 
 function _update()
@@ -45,17 +45,16 @@ end
 -- Drawing functions
 
 function drawCursor()
-    color(7) -- Set default color to white
+    set_color(7) -- Set default color to white
     if (cursor.visible) then
-        color(7)
-        rect(cursor.x_coord, cursor.y_coord, cursor.x_coord + 4, cursor.y_coord + 6)
+        set_color(7)
+        draw_rect(cursor.x_coord, cursor.y_coord, cursor.x_coord + 4, cursor.y_coord + 6)
     end
 end
 
-
 function _draw()
-    cls() -- Clear screen
-    color(7) -- Set default color to white
+    screen_clear() -- Clear screen
+    set_color(7) -- Set default color to white
     draw_string("$> Hello, Console!", 0, 0)
     drawCursor() -- Draw cursor
     flip() -- You must inform the GPU that there's a new frame rendered

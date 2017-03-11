@@ -14,7 +14,7 @@ function set_pixel(x, y, c)
     if (c == nil) then
         c = peek8(mem_videoregs + 0x50)
     end
-    local index = y * screenWidth + x
+    local index = (y * screenWidth) + x
     poke8(index + mem_vram, c)
 end
 
@@ -104,4 +104,38 @@ function draw_char(c, drawx, drawy, rel_size)
         sprite_y = sprite_y + 1
         sprite_x = 0
     until sprite_y == 6
+end
+
+function spr(num, dx0, dy0, width, height, flip_x, flip_y ,pal)
+    if not pal then pal = -1 end
+    if not width then width = 1 end
+    if not height then height = 1 end
+    if not flip_x then flip_x = false end
+    if not flip_y then flip_y = false end
+
+    -- Sprite index
+    local sx0 = 0
+    local sy0 = 0
+    -- Draw index
+    local sx1 = 8 * width
+    local sy1 = 8 * height
+    repeat
+        repeat
+            local pix = peek8(0x20000 + (num * 64) + (sy0 * sy1) + sx0)
+
+            if (pal ~= -1) then
+                pix = peek8(0x1E200 + (pal * 256) + pix)
+            end
+
+            set_pixel(sx0 + dx0, sy0 + dy0, pix)
+            sx0 = sx0 + 1
+        until sx0 == sx1
+        sx0 = 0
+        sy0 = sy0 + 1
+    until sy0 == sy1
+
+end
+
+function spr_set(num, x, y, c)
+    poke8(0x20000 + (num * 64) + (8 * y) + x, c)
 end

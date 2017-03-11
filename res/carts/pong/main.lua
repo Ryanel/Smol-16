@@ -174,8 +174,7 @@ function _update()
 end
 
 function drawshape(s)
-  draw_rect(floor(s.x)  , floor(s.y),
-           floor(s.x+4), floor(s.y+s.h))
+  draw_rect(floor(s.x)  , floor(s.y), floor(s.x+4), floor(s.y+s.h))
 end
 
 function _draw()

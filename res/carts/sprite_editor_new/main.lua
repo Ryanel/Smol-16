@@ -1,9 +1,11 @@
 global_timer = 0
 
-dofile("carts/sprite_editor_new/oo.lua")
-dofile("carts/sprite_editor_new/panel.lua")
-dofile("carts/sprite_editor_new/palette.lua")
-dofile("carts/sprite_editor_new/mouse.lua")
+require("object.lua")
+require("panel.lua")
+require("palette.lua")
+require("sprite_editor.lua")
+require("spritesheet.lua")
+require("mouse.lua")
 
 palette_cursor = {
   color = 0,
@@ -21,15 +23,23 @@ function _init()
 end
 
 function _update()
-  mouse.update()
-  palette.update()
-
+  mouse:update()
+  palette:Update()
+  spritesheet:Update()
+  editor:Update()
   global_timer = global_timer + 1
 end
 
 function _draw()
-  screen_clear()
-  palette.draw()
-  mouse.draw()
+  -- Clear screen
+  set_color(1)
+  draw_rect(0,0,256, 224)
+
+  -- Draw panels
+  palette:Draw()
+  spritesheet:Draw()
+  editor:Draw()
+
+  mouse:draw()
   flip()
 end

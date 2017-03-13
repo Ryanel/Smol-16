@@ -47,6 +47,7 @@ bool Smol16::CheckRender() {
 void Smol16::LoadCart(std::string location) {
     cartPath = location;
     std::string code_path = location + "/main.lua";
+    (*lua)["_cart_path"] = location.c_str();
     LoadFile(code_path);
 }
 

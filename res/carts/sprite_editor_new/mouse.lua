@@ -1,31 +1,32 @@
-Mouse = class(function ()
-    function __init()
-      this.x = 0
-      this.y = 0
-      this.color = 1
-    end
-    function draw()
-      if(global_timer % 15 == 0) then
-        this.color = ((this.color + 1) % 16)
-        this.color = math.max(this.color, 3)
-      end
+Mouse = Object:extend()
 
-      set_color(this.color)
-      draw_rect(this.x,this.y, this.x + 2, this.y + 2)
-      draw_rect(this.x,this.y, this.x + 6, this.y + 2)
-      draw_rect(this.x,this.y, this.x + 2, this.y + 6)
-      set_color(this.color - 1)
-      draw_rect(this.x + 2,this.y + 2, this.x + 4, this.y + 4)
-      draw_rect(this.x + 2,this.y + 2, this.x + 5, this.y + 4)
-      draw_rect(this.x + 2,this.y + 2, this.x + 4, this.y + 5)
-      set_color(this.color - 2)
-      draw_rect(this.x + 4,this.y + 4, this.x + 6, this.y + 6)
-    end
-    function update()
-      this.x = _get_mouse_x()
-      this.y = _get_mouse_y()
-    end
+function Mouse:new()
+  self.x = 0
+  self.y = 0
+  self.color = 1
+end
 
-  end)
+function Mouse:draw()
+  if(global_timer % 15 == 0) then
+    self.color = ((self.color + 1) % 16)
+    self.color = math.max(self.color, 3)
+  end
+
+  set_color(self.color)
+  draw_rect(self.x,self.y, self.x + 2, self.y + 2)
+  draw_rect(self.x,self.y, self.x + 6, self.y + 2)
+  draw_rect(self.x,self.y, self.x + 2, self.y + 6)
+  set_color(self.color - 1)
+  draw_rect(self.x + 2,self.y + 2, self.x + 4, self.y + 4)
+  draw_rect(self.x + 2,self.y + 2, self.x + 5, self.y + 4)
+  draw_rect(self.x + 2,self.y + 2, self.x + 4, self.y + 5)
+  set_color(self.color - 2)
+  draw_rect(self.x + 4,self.y + 4, self.x + 6, self.y + 6)
+end
+
+function Mouse:update()
+  self.x = _get_mouse_x()
+  self.y = _get_mouse_y()
+end
 
 mouse = Mouse()

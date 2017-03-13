@@ -1,55 +1,74 @@
-Panel = class(function()
-    function __init()
-      this.x = 0
-      this.y = 0
-      this.w = 128
-      this.h = 64
-      this.window_color = 7
-      this.title = ""
-      this.hide_pane = false
-    end
+Panel = Object:extend()
 
-    function set_bounds(x, y, w, h)
-      this.x = x
-      this.y = y
-      this.w = w
-      this.h = h
-    end
+function Panel:new(x, y, w, h)
+  self.x = x or 0
+  self.y = y or 0
+  self.w = w or 0
+  self.h = w or 0
+  self.window_color = 7
+  self.title = ""
+  self.no_chrome = false
+  self.cursor_hold = {}
+  self.cursor_hold.x = -100
+  self.cursor_hold.y = -100
+  self.cursor_hold.is = false
+end
 
-    function in_bounds()
-      local mouse_in = false
-      if (mouse.x >= this.x and mouse.x <= this.x + this.w) then
-        if(mouse.y >= this.y and mouse.y <= this.y + this.h) then
-          mouse_in = true
-        end
+function Panel:SetBounds(x, y, w, h)
+  self.x = x
+  self.y = y
+  self.w = w
+  self.h = h
+end
+
+function Panel:Update()
+  self:UpdateContent()
+  --self:DragTitleBar() FIXME: Moves all other windows
+end
+
+function Panel:Draw()
+  self:DrawTitlebar()
+  self:DrawContent()
+end
+
+function Panel:DrawTitlebar()
+  if(self.no_chrome) then return end
+  set_color(self.window_color)
+  draw_rect(self.x, self.y, self.x + self.w, self.y + 8) -- Titlebar
+  set_color(8)
+  draw_string(self.title, self.x + 8 ,self.y + 1)
+  set_color(6)
+  draw_rect(self.x, self.y + 8, self.x + self.w, self.y + self.h) -- Titlebar
+end
+
+function Panel:UpdateContent() end
+function Panel:DrawContent() end
+
+function Panel:InBounds(x, y)
+  local inside = false
+  if (x >= self.x and x <= self.x + self.w) then
+    if(y >= self.y and y <= self.y + self.h) then
+      inside = true
+    end
+  end
+  return inside
+end
+
+function Panel:DragTitleBar()
+  if(self.no_chrome) then return end
+  if btn(9) then
+    if(self.cursor_hold.is == false) then
+      self.cursor_hold.x = mouse.x - self.x
+      self.cursor_hold.y = mouse.y - self.y
+      self.cursor_hold.is = true
+    end
+    if(mouse.y - self.y < 8 and self:InBounds(mouse.x, mouse.y)) then
+      self.y = mouse.y - self.cursor_hold.y
+      if self.w < 255 then
+        self.x = mouse.x - self.cursor_hold.x
       end
-      this.is_in = mouse_in
     end
-
-    function update()
-
-    end
-
-    function draw()
-      if(not this.hide_pane) then
-        set_color(this.window_color)
-        draw_rect(this.x, this.y, this.x + this.w, this.y + 8) -- Titlebar
-        set_color(1)
-        draw_string(this.title, this.x + 8 ,this.y + 1)
-        set_color(6)
-        draw_rect(this.x, this.y + 8, this.x + this.w, this.y + this.h) -- Titlebar
-      else
-
-      end
-
-      this.draw_content()
-    end
-
-    function draw_content()
-
-    end
-
-    function OnDrag(x, y)
-      -- Move panel x and y
-    end
-  end)
+  else
+    self.cursor_hold.is = false
+  end
+end

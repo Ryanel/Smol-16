@@ -1,7 +1,7 @@
 #include <config.h>
 #include <iostream>
 #include <cxxopts.hpp>
-#include <sdl_timer.h>
+#include <smol_timer.h>
 #include <render_sdl.h>
 #include <smol/smol16.h>
 #include <spdlog/spdlog.h>

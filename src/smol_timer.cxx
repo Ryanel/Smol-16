@@ -1,4 +1,4 @@
-#include <sdl_timer.h>
+#include <smol_timer.h>
 #include <SDL.h>
 Timer::Timer() {
     start_ticks = 0;

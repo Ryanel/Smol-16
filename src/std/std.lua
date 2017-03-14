@@ -5,9 +5,16 @@ This is parsed before a cart is loaded. All functions here are avalable for use.
 
 _std_version = 1
 
+function console_log(message)
+  local header_name = ""
+  if(cart_header ~= nil) then header_name = cart_header.name
+  else header_name = "Cart" end
+  print("["..header_name.."]: ".. message)
+end
+
 function require(location)
   local path = _cart_path .. "/" .. location
-  print("[Cart]: Requiring " .. path)
+  console_log("Requiring " .. path)
   dofile(path)
 end
 

@@ -27,6 +27,7 @@ const uint8_t defaultPalette[256 * 3] = {
 
 
 Display * Display::m_instance;
+static Memory * mem_instance;
 int Display::scale = 3;
 Display * Display::instance()
 {
@@ -41,15 +42,16 @@ Display::Display() {
     sys->Register("screen_clear", Display::Lua_Clear);
     sys->Register("palette_reset", Display::Lua_PaletteReset);
     sys->Register("_to_bgr", Display::Lua_RGBToBGR15);
+    mem_instance = Memory::instance();
 }
 
 void Display::Clear() {
     memset(pixels, 0, width * height * sizeof(color_t));
-    memset(Memory::instance()->ram + MEM_VRAM, 0, width * height);
+    memset(mem_instance->ram + MEM_VRAM, 0, width * height);
 }
 
 void Display::PaletteReset() {
-    Memory * m = Memory::instance();
+    Memory * m = mem_instance;
     int pal_index = 0; // + 1
     int arr_index = 0; // + 3
 
@@ -65,7 +67,7 @@ void Display::PaletteReset() {
 }
 
 color_t * Display::Render() {
-    Memory * mem = Memory::instance();
+    Memory * mem = mem_instance;
     //TODO: Cache Palette
     color_t palette[256];
 

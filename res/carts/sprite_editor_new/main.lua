@@ -1,5 +1,9 @@
 global_timer = 0
 
+cart_header = {
+  name = "Sprite Editor"
+}
+
 require("object.lua")
 require("panel.lua")
 require("palette.lua")

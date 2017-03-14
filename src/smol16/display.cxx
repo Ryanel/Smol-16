@@ -39,15 +39,15 @@ Display::Display() {
     pixels = new color_t[width * height]; // Framebuffer of RGBA8888 pixel data.
     sys->Register("screenWidth", width);
     sys->Register("screenHeight", height);
-    sys->Register("screen_clear", Display::Lua_Clear);
+    sys->Register("cls", Display::Lua_Clear);
     sys->Register("palette_reset", Display::Lua_PaletteReset);
     sys->Register("_to_bgr", Display::Lua_RGBToBGR15);
     mem_instance = Memory::instance();
 }
 
-void Display::Clear() {
+void Display::Clear(uint8_t color) {
     memset(pixels, 0, width * height * sizeof(color_t));
-    memset(mem_instance->ram + MEM_VRAM, 0, width * height);
+    memset(mem_instance->ram + MEM_VRAM, color, width * height);
 }
 
 void Display::PaletteReset() {
@@ -85,8 +85,8 @@ color_t * Display::Render() {
 int Display::Lua_RGBToBGR15(int r, int g, int b) {
     return Color::BGR15FromRGB(r,g,b);
 }
-void Display::Lua_Clear() {
-    instance()->Clear();
+void Display::Lua_Clear(int color) {
+    instance()->Clear(color & 0xFF);
 }
 void Display::Lua_PaletteReset() {
     instance()->PaletteReset();

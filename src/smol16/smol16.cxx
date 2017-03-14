@@ -16,6 +16,7 @@ void Smol16::Init() {
     display = Display::instance();
     input = Input::instance();
     lua->Load("data/std/std.lua");
+    Register("stat_cpu", &Smol16::LuaGetCPU);
     //lua_sethook(lua->_l, &Smol16::LuaHook, LUA_MASKCOUNT, 100);
 }
 
@@ -49,6 +50,10 @@ void Smol16::LoadCart(std::string location) {
     std::string code_path = location + "/main.lua";
     (*lua)["_cart_path"] = location.c_str();
     LoadFile(code_path);
+}
+
+int Smol16::LuaGetCPU() {
+    return sys->cpu_usage;
 }
 
 void Smol16::LoadFile(std::string location) {

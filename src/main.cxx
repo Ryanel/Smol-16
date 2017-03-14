@@ -28,11 +28,32 @@ void MainLoop() {
         if(sys->CheckRender()) {
             SDLRenderer::Flip();
         }
+
+
+
+        // Calculate CPU usage and frame delay.
         int frameTicks = fpsCapTimer.GetTicks();
-        if( frameTicks < TICKS_PER_FRAME ) {
+        float margin = TICKS_PER_FRAME - frameTicks;
+        if( frameTicks <= TICKS_PER_FRAME ) {
             SDL_Delay( TICKS_PER_FRAME - frameTicks );
-            // Restart here
         }
+        else {
+            margin = abs(margin);
+        }
+        float cpu = (float)((TICKS_PER_FRAME - frameTicks));    // > 0 == < 100% cpu
+                                                                // < 0 == > 100% cpu
+        if(cpu >= 0) {
+            float val = 16 - cpu;
+            if(val < 1) {val = 1;}
+            val = 100 / val;
+            cpu = val;
+        } else {
+            float val = abs(cpu);
+            val = val * TICKS_PER_FRAME;
+            cpu = val;
+        }
+        sys->cpu_usage = cpu;
+        //printf("CPU: %2.2f%\n", cpu);
     }
 }
 

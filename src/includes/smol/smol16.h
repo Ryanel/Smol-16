@@ -20,6 +20,7 @@ private:
 public:
     int stat_statements_frame = 0;
     int maxStatementsPerFrame = 10;
+    float cpu_usage;
     std::string cartPath;
     sel::State * lua;
     Memory * mem;
@@ -39,6 +40,7 @@ public:
     void LoadFile(std::string location);
     template <typename T> void Register(const char *name,T func) { (*lua)[name] = func; }
     static void LuaHook(lua_State *L, lua_Debug *ar);
+    static int LuaGetCPU();
 };
 
 extern Smol16 * sys;

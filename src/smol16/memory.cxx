@@ -26,32 +26,6 @@ int Memory::GetAddress(int address) {
     return address;
 }
 
-/*! Writes a 8bit value to address*/
-void Memory::Poke8(int address, int data) {
-    //address = GetAddress(address);
-    ram[address] = ito8(data);
-}
-/*! Writes a 16bit value to address*/
-void Memory::Poke16(int address, int data) {
-    //address = GetAddress(address);
-    Poke8(address + 1, (unsigned char)(data & 0x00ff));
-    Poke8(address, (unsigned char)((data & 0xff00) >> 8));
-    //Todo, store memory little endian
-}
-/*! Reads a 8bit value from address*/
-uint8_t Memory::Peek8(int address) {
-    //address = GetAddress(address);
-    return ito8(ram[address]);
-}
-/*! Reads a 16bit value from address*/
-uint16_t Memory::Peek16(int address) {
-    //address = GetAddress(address);
-    uint8_t a = Peek8(address);
-    uint8_t b = Peek8(address + 1);
-    uint16_t ret = (uint16_t)((a << 8) | (b & 0xff));
-    return ret;
-}
-
 void Memory::Lua_Poke8(int address, int data) {
     return m_instance->Poke8(address, data);
 }

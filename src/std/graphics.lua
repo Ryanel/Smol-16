@@ -90,7 +90,7 @@ function draw_string(str, x, y, rel_size)
   until index == string.len(str) + 1
 
 end
-
+--FIXME: Bottleneck. Optimize memory access
 function draw_char(c, drawx, drawy, rel_size)
   if not rel_size then rel_size = 1 end
   local sprite_x = 0
@@ -112,6 +112,7 @@ function draw_char(c, drawx, drawy, rel_size)
   until sprite_y == 6
 end
 
+--FIXME: Bottleneck. Optimize memory access
 function spr(num, dx0, dy0, width, height, flip_x, flip_y ,pal)
   if not pal then pal = -1 end
   if not width then width = 1 end

@@ -28,10 +28,22 @@ public:
 
     static int GetAddress(int address);
 
-    void Poke8  (address_t address, int data);
-    void Poke16 (address_t address, int data);
-    uint8_t  Peek8  (address_t address);
-    uint16_t  Peek16 (address_t address);
+    // Memory functions inlined to save performance! It genuinely saves alot
+    inline void Poke8(int address, uint8_t data) {
+        ram[address] = data;
+    }
+    inline void Poke16(int address, uint16_t data) {
+        Poke8(address + 1, (unsigned char)(data & 0x00ff));
+        Poke8(address, (unsigned char)((data & 0xff00) >> 8));
+    }
+    inline uint8_t  Peek8  (address_t address) {
+        return ram[address];
+    }
+    inline uint16_t  Peek16 (address_t address) {
+        uint8_t a = Peek8(address);
+        uint8_t b = Peek8(address + 1);
+        return (uint16_t)((a << 8) | (b & 0xff));
+    }
 
 
     // Static versions for Lua

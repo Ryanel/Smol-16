@@ -151,7 +151,6 @@ function intersection(l, r, b)
           -- with the numbers till
           -- you get what you want
           rl = rl
-          angle = sin(rl)
           b.dy = (rl - 0.5) * 3
 
           -- boop
@@ -160,7 +159,7 @@ function intersection(l, r, b)
       end
 
       function _init()
-        screen_clear()
+        cls(1)
         palette_reset()
         set_color(1)
       end
@@ -178,7 +177,7 @@ function intersection(l, r, b)
       end
 
       function _draw()
-        cls(0)
+        cls(1)
         set_color(12)
         drawshape(l)
         set_color(10)

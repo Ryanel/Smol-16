@@ -52,7 +52,6 @@ void Display::Clear(uint8_t color) {
 
 void Display::PaletteReset() {
     Memory * m = mem_instance;
-    int pal_index = 0; // + 1
     int arr_index = 0; // + 3
 
     for(int pal_index = 0; pal_index < 256; pal_index++) {

@@ -2,11 +2,14 @@ Palette = Panel:extend()
 
 function Palette:new()
   Palette.super:new()
-  self:SetBounds(0,0,256,25)
+  self:SetBounds(0,224 - (24 + 8),256,24)
   self.title = "Palette"
+  self.window_color = 5
+  self.window_text = 8
   self.cursor = {}
   self.cursor.index = 0
   self.cursor.color = 7
+  self.nodrag_x = true
 end
 
 function Palette:DrawContent()
@@ -50,13 +53,7 @@ function Palette:UpdateContent()
       self.cursor.index = fin
     end
   end
-  if btn(0) then
-    self.y = self.y - 1
-  end
-  if btn(2) then
-    self.y = self.y + 1
-  end
-  self.title = "Palette ("..self.cursor.index..")"
+  self.title = "Palette (Color "..self.cursor.index..")"
 end
 
 palette = Palette()

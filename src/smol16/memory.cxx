@@ -21,11 +21,6 @@ Memory::Memory() {
     sys->Register("peek16",&Memory::Lua_Peek16);
 }
 
-int Memory::GetAddress(int address) {
-    while(address > CONFIG_RAMSIZE) {address -= CONFIG_RAMSIZE;}
-    return address;
-}
-
 void Memory::Lua_Poke8(int address, int data) {
     return m_instance->Poke8(address, data);
 }

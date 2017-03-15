@@ -32,7 +32,7 @@ end
 
 -- System callback functions
 function _init()
-  screen_clear()
+  cls(1)
   palette_reset()
 end
 

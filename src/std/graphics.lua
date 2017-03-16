@@ -146,3 +146,7 @@ end
 function spr_set(num, x, y, c)
   poke8(0x20000 + (num * 64) + (8 * y) + x, c)
 end
+
+function spr_get(num, x, y)
+  return peek8(0x20000 + (num * 64) + (8 * y) + x)
+end

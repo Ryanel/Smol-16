@@ -20,4 +20,4 @@ Smol-16 is in early development! Be wary about using it (though do contribute an
     * Treat it like editing the Microcode on a N64. It's to get as much performance as possible out of the machine
 
 ## Quirks
-[TODO]
+* Color 0 is transparent for sprite operations, but black. (Color 16 is also black)

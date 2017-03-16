@@ -18,6 +18,9 @@ function Panel:new(x, y, w, h)
   self.dragging_is = false
   self.nodrag_x = false
   self.nodrag_y = false
+  self.minimised = false
+  self.minimisable = true
+  self.visible = true
 end
 
 function Panel:SetBounds(x, y, w, h)
@@ -27,14 +30,40 @@ function Panel:SetBounds(x, y, w, h)
   self.h = h
 end
 
+function Panel:Hide()
+  self.visible = false
+end
+
+function Panel:Show()
+  self.visible = true
+end
+
 function Panel:Update()
-  self:UpdateContent()
-  self:DragTitleBar() --FIXME: Moves all other windows
+  local inBounds = self:InBounds(mouse.x, mouse.y)
+  if btnp(9) and mouse.y - self.y <= 8 and inBounds then -- If we're clicking on the titlebar
+    if(mouse.x >= self.x + self.w - 8 and self.minimisable) then -- Minimise
+      if self.minimised then
+        self.minimised = false
+      else
+        self.minimised = true
+      end
+    end
+  end
+  if self.visible and self.minimised == false then
+    self:UpdateContent()
+  end
+  if self.visible then
+    self:DragTitleBar() --FIXME: Moves all other windows
+  end
 end
 
 function Panel:Draw()
-  self:DrawTitlebar()
-  self:DrawContent()
+  if self.visible == true then
+    self:DrawTitlebar()
+  end
+  if self.minimised == false and self.visible then
+    self:DrawContent()
+  end
 end
 
 function Panel:DrawTitlebar()
@@ -42,9 +71,19 @@ function Panel:DrawTitlebar()
   set_color(self.window_color)
   draw_rect(self.x, self.y, self.x + self.w, self.y + 8) -- Titlebar
   set_color(self.window_text)
-  draw_string(self.title, self.x + 8 ,self.y + 1)
-  set_color(6)
-  draw_rect(self.x, self.y + 8, self.x + self.w, self.y + self.h) -- Titlebar
+  draw_string(self.title, self.x + 4 ,self.y + 1)
+
+  -- Draw controls
+  if self.minimisable then
+    set_color(8)
+    draw_rect(self.x + self.w - 8, self.y, self.x + self.w, self.y + 8)
+    set_color(7)
+    draw_rect(self.x + self.w - 7, self.y + 3, self.x + self.w - 1, self.y + 5)
+  end
+  if self.minimised == false then
+    set_color(6)
+    draw_rect(self.x, self.y + 8, self.x + self.w, self.y + self.h) -- Titlebar
+  end
 end
 
 function Panel:UpdateContent() end

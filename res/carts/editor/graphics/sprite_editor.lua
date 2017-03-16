@@ -4,7 +4,7 @@ local zooms = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26}
 
 function SpriteEditor:new()
   SpriteEditor.super:new()
-  self.zoom_level = 8
+  self.zoom_level = 10
   self:SetBounds(96, 32, 64, 128 + 8)
 
   self.title = "Sprite Editor"
@@ -35,10 +35,10 @@ function SpriteEditor:DrawContent()
       local scaled_y = sy0 * scale
 
       if(pix ~= 0) then
-        draw_rect(dx0 + scaled_x, dy0 + scaled_y,dx0 + scaled_x + scale, dy0 + scaled_y + scale)
+        gfx_rect(dx0 + scaled_x, dy0 + scaled_y,dx0 + scaled_x + scale, dy0 + scaled_y + scale)
       else
-        draw_rect(dx0 + scaled_x, dy0 + scaled_y,dx0 + scaled_x + (scale / 2), dy0 + scaled_y + (scale / 2))
-        draw_rect(dx0 + scaled_x + (scale / 2), dy0 + scaled_y + (scale / 2),dx0 + scaled_x + scale, dy0 + scaled_y + scale)
+        gfx_rect(dx0 + scaled_x, dy0 + scaled_y,dx0 + scaled_x + (scale / 2), dy0 + scaled_y + (scale / 2))
+        gfx_rect(dx0 + scaled_x + (scale / 2), dy0 + scaled_y + (scale / 2),dx0 + scaled_x + scale, dy0 + scaled_y + scale)
       end
 
       sx0 = sx0 + 1

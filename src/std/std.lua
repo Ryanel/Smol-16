@@ -18,6 +18,11 @@ function require(location)
   dofile(path)
 end
 
+function load_sample(id)
+  local sample_path = _cart_path .. "/sfx/"..id..".wav"
+  snd_loadsample(id, sample_path)
+end
+
 dofile("data/std/math.lua")
 dofile("data/std/memory.lua")
 dofile("data/std/graphics.lua")

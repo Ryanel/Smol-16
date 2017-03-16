@@ -48,7 +48,7 @@ function drawCursor()
   set_color(7) -- Set default color to white
   if (cursor.visible) then
     set_color(7)
-    draw_rect(cursor.x_coord, cursor.y_coord, cursor.x_coord + 4, cursor.y_coord + 6)
+    gfx_rect(cursor.x_coord, cursor.y_coord, cursor.x_coord + 4, cursor.y_coord + 6)
   end
 end
 

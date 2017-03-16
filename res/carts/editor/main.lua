@@ -4,6 +4,10 @@ cart_header = {
   name = "Sprite Editor"
 }
 
+editor = {
+  background_color = 1
+}
+
 require("object.lua")
 require("panel.lua")
 require("dialog.lua")
@@ -11,6 +15,7 @@ require("editor_mode.lua")
 require("mode_switcher.lua")
 require("cart/editor_cart.lua")
 require("graphics/editor_graphics.lua")
+require("music/editor_music.lua")
 require("mouse.lua")
 
 local cpu_adverage = {}
@@ -30,7 +35,11 @@ function _init()
 
   editor_modes[0] = EditorCart(0, "Cart")
   editor_modes[1] = EditorGraphics(1, "Graphics")
+  editor_modes[4] = EditorMusic(4, "Music")
   editor_mode = 1
+
+  editor_modes[editor_mode]:Show()
+
   poke8(0x1E200 + 10, 9)
   poke8(0x1E200 + 9, 8)
   poke8(0x1E300 + 10, 12)
@@ -62,17 +71,17 @@ function _update()
 end
 
 function _draw()
-  cls(1)
-
-  --Draw cpu
-  set_color(7)
-
-  editor_modes[editor_mode]:Draw()
-  mode_switcher:Draw()
-  dialog:Draw()
+  cls(editor.background_color)
+  draw_windows()
   mouse:draw()
   draw_cpu()
   flip()
+end
+
+function draw_windows()
+  editor_modes[editor_mode]:Draw()
+  mode_switcher:Draw()
+  dialog:Draw()
 end
 
 function draw_cpu()
@@ -84,5 +93,5 @@ function draw_cpu()
   until i == cpu_adverage_samples
   cpu_adv = cpu_adv / cpu_adverage_samples
   set_color(7)
-  draw_string("AVG CPU: "..round(cpu_adv*100)*0.01 .. "%", 200, 1)
+  draw_string("AVG CPU: "..round(cpu_adv*10)*0.1 .. "%", 200, 1)
 end

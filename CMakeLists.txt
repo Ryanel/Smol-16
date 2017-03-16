@@ -10,8 +10,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 find_package(SDL2 REQUIRED)
 find_package(Lua REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
+include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${LUA_INCLUDE_DIR})
 
 # Manually included libs
@@ -30,9 +32,9 @@ configure_file("${PROJECT_SOURCE_DIR}/src/std/std.lua" "${PROJECT_BINARY_DIR}/da
 configure_file("${PROJECT_SOURCE_DIR}/res/font.png" "${PROJECT_BINARY_DIR}/data/font.png" COPYONLY)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++14 -g -pg -ggdb -Og")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++14 -Wall -O3")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++14 ")
 add_executable(${PROJECTNAME} ${SOURCES})
-target_link_libraries(${PROJECTNAME} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})
+target_link_libraries(${PROJECTNAME} ${LUA_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDLMIXER_LIBRARY})
 
 add_custom_target(carts ALL
 DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/carts_fake.h)

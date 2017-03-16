@@ -20,10 +20,10 @@ function SpriteSheetEditor:DrawContent()
     spr(sprite_index, self.x + (x * 8), self.y + (y * 8), 1, 1, false, false, -1)
     if sprite_index == sprite_editor_ctx.selected_sprite and (global_timer % 10) > 5 then -- Selection cursor
       set_color(0)
-      draw_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 1)
-      draw_rect(self.x + (x * 8), self.y + (y * 8) + 7,self.x + (x * 8) + 8, self.y + (y * 8) + 8)
-      draw_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8), self.y + (y * 8) + 8)
-      draw_rect(self.x + (x * 8) + 7, self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 8)
+      gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 1)
+      gfx_rect(self.x + (x * 8), self.y + (y * 8) + 7,self.x + (x * 8) + 8, self.y + (y * 8) + 8)
+      gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8), self.y + (y * 8) + 8)
+      gfx_rect(self.x + (x * 8) + 7, self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 8)
     end
     if x == sprites_per_line - 1 then
       x = 0

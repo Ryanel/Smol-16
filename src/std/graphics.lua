@@ -31,18 +31,9 @@ end
 
 -- Drawing functions
 
-function draw_rect(x0, y0, x1, y1)
-  local x = x0
-  local y = y0
-
-  while true do
-    if(y == y1) then break end
-    repeat
-      set_pixel(x,y); x = x + 1;
-    until x > x1 or x == x1
-    x = x0
-    y = y + 1
-  end
+function gfx_rect(x0, y0, x1, y1, c)
+  if not c then c = peek8(mem_videoregs + 0x50) end
+  gfx_hw_rect(x0,y0,x1,y1,c)
 end
 
 function draw_line(x0, y0, x1, y1)
@@ -103,7 +94,7 @@ function draw_char(c, drawx, drawy, rel_size)
       if hasbit(peek8(location), bit(index)) then
         local scaled_x = sprite_x * rel_size
         local scaled_y = sprite_y * rel_size
-        draw_rect(scaled_x + drawx, scaled_y + drawy, scaled_x + drawx + rel_size, scaled_y + drawy + rel_size)
+        gfx_rect(scaled_x + drawx, scaled_y + drawy, scaled_x + drawx + rel_size, scaled_y + drawy + rel_size)
       end
       sprite_x = sprite_x + 1
     until sprite_x == 4

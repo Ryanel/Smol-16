@@ -24,7 +24,7 @@ function Palette:DrawContent()
     local y = (y_offset * 4) + self.y
     if(not self.no_chrome) then y = y + 8 end
 
-    draw_rect(x, y, x + 4, y + 4)
+    gfx_rect(x, y, x + 4, y + 4)
     if (pal_color == self.cursor.index and (global_timer % 30) > 10) then
       if(pal_color == self.cursor.color) then
         set_color(0)
@@ -32,9 +32,9 @@ function Palette:DrawContent()
         set_color(self.cursor.color)
       end
 
-      draw_rect(x, y, x + 4, y + 4)
+      gfx_rect(x, y, x + 4, y + 4)
       set_color(pal_color)
-      draw_rect(x + 1, y + 1, x + 3, y + 3)
+      gfx_rect(x + 1, y + 1, x + 3, y + 3)
     end
 
     pal_color = pal_color + 1

@@ -14,6 +14,7 @@ function EditorGraphics:new(index, name)
 end
 
 function EditorGraphics:Show()
+  editor.background_color = 1
   self.palette:Show()
   self.editor:Show()
   self.spritesheet:Show()

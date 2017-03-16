@@ -27,6 +27,10 @@
 -- ai - computer controlled
 -- player - which player
 
+cart_header = {
+  name = "Pong"
+}
+load_sample(0)
 l = {
   x = 5,
   y = 50,
@@ -103,6 +107,7 @@ function intersection(l, r, b)
   elseif (
       b.y < 0 or b.y > screenHeight) then
       b.dy = -b.dy
+      snd_sfx(0)
       -- ball hit left paddle
     elseif (b.x < l.x and
         b.y >= l.y - b.h and
@@ -154,7 +159,7 @@ function intersection(l, r, b)
           b.dy = (rl - 0.5) * 3
 
           -- boop
-          --sfx(0)
+          snd_sfx(0)
         end
       end
 
@@ -173,7 +178,7 @@ function intersection(l, r, b)
       end
 
       function drawshape(s)
-        draw_rect(floor(s.x) , floor(s.y), floor(s.x+4), floor(s.y+s.h))
+        gfx_rect(floor(s.x) , floor(s.y), floor(s.x+4), floor(s.y+s.h))
       end
 
       function _draw()
@@ -189,7 +194,7 @@ function intersection(l, r, b)
         -- the middle of the field
         set_color(6)
         for i=0,64 do
-          draw_rect(127 , 1 + i*5 ,
+          gfx_rect(127 , 1 + i*5 ,
             127+2, i*5+3)
         end
         set_color(12)

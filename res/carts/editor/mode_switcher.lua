@@ -8,12 +8,12 @@ function ModeSwitcher:new()
   self.nodrag_x = true
   self.nodrag_y = true
   self.minimisable = false
-  self.total_modes = 4
+  self.total_modes = 5
 end
 
 function ModeSwitcher:DrawContent()
   set_color(12)
-  draw_rect(self.x, self.y, self.x + self.w, self.y + self.h)
+  gfx_rect(self.x, self.y, self.x + self.w, self.y + self.h)
 
   -- Draw modes
   local modes = 0
@@ -77,12 +77,28 @@ function ModeSwitcher:DrawContent()
       spr_array(sprite, x * 8, 0)
     end
 
+    if modes == 4 then
+      local sprite = {
+        0,0,0,16,16,16,0,0,
+        0,0,0,16,0,16,16,0,
+        0,0,0,16,0,0,16,0,
+        0,0,0,16,0,0,16,0,
+        0,0,0,16,0,16,0,0,
+        0,16,16,16,0,0,0,0,
+        16,16,16,16,0,0,0,0,
+        0,16,16,0,0,0,0,0,
+      }
+
+      spr_array(sprite, x * 8, 0)
+
+    end
+
     if (editor_mode == modes and global_timer % 30 > 15) then
       set_color(7)
-      draw_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 1)
-      draw_rect(self.x + (x * 8), self.y + (y * 8) + 7,self.x + (x * 8) + 8, self.y + (y * 8) + 8)
-      draw_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8), self.y + (y * 8) + 8)
-      draw_rect(self.x + (x * 8) + 7, self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 8)
+      gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 1)
+      gfx_rect(self.x + (x * 8), self.y + (y * 8) + 7,self.x + (x * 8) + 8, self.y + (y * 8) + 8)
+      gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8), self.y + (y * 8) + 8)
+      gfx_rect(self.x + (x * 8) + 7, self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 8)
     end
     x = x + 1
     modes = modes + 1
@@ -97,7 +113,7 @@ function ModeSwitcher:DrawContent()
     local x = mouse.x + 4
     local y = mouse.y + 8
     local str = editor_modes[mode].name
-    draw_rect(x, y, x + string.len(str) * 4 + 4, y + 8)
+    gfx_rect(x, y, x + string.len(str) * 4 + 4, y + 8)
     set_color(7)
     draw_string(str, x + 2, y + 1)
   end

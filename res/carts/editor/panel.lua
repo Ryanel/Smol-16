@@ -8,6 +8,7 @@ function Panel:new(x, y, w, h)
 
   -- Window properties
   self.window_color = 7
+  self.window_bg = 6
   self.window_text = 8
   self.title = ""
   self.no_chrome = false
@@ -64,9 +65,9 @@ function Panel:DrawButton(x, y, w, h, str)
   set_color(16)
   local lx = self.x + x
   local ly = self.y + y
-  draw_rect(lx, ly + 8, lx + w, ly + h + 8)
+  gfx_rect(lx, ly + 8, lx + w, ly + h + 8)
   set_color(7)
-  draw_rect(lx + 1, ly + 9, lx + w - 1, ly + h + 7)
+  gfx_rect(lx + 1, ly + 9, lx + w - 1, ly + h + 7)
   set_color(16)
   draw_string(str,lx + 2, ly + 10)
 end
@@ -83,20 +84,20 @@ end
 function Panel:DrawTitlebar()
   if(self.no_chrome) then return end
   set_color(self.window_color)
-  draw_rect(self.x, self.y, self.x + self.w, self.y + 8) -- Titlebar
+  gfx_rect(self.x, self.y, self.x + self.w, self.y + 8) -- Titlebar
   set_color(self.window_text)
   draw_string(self.title, self.x + 4 ,self.y + 1)
 
   -- Draw controls
   if self.minimisable then
     set_color(8)
-    draw_rect(self.x + self.w - 8, self.y, self.x + self.w, self.y + 8)
+    gfx_rect(self.x + self.w - 8, self.y, self.x + self.w, self.y + 8)
     set_color(7)
-    draw_rect(self.x + self.w - 7, self.y + 3, self.x + self.w - 1, self.y + 5)
+    gfx_rect(self.x + self.w - 7, self.y + 3, self.x + self.w - 1, self.y + 5)
   end
   if self.minimised == false then
-    set_color(6)
-    draw_rect(self.x, self.y + 8, self.x + self.w, self.y + self.h) -- Titlebar
+    set_color(self.window_bg)
+    gfx_rect(self.x, self.y + 8, self.x + self.w, self.y + self.h) -- Titlebar
   end
 end
 

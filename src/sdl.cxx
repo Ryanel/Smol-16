@@ -17,7 +17,7 @@ uint8_t GetFromBuffer(uint32_t * buf, int x, int y, int width) {
 
 void SDLRenderer::Init() {
     _logger = spdlog::get("sdl");
-    if (SDL_Init(SDL_INIT_VIDEO) != 0){
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0){
 		_logger->error("Failed to init SDL");
         exit(1);
 	}

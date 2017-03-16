@@ -4,12 +4,16 @@
 #include <smol_timer.h>
 #include <render_sdl.h>
 #include <smol/smol16.h>
+#include <smol/sound.h>
 #include <spdlog/spdlog.h>
 Timer fpsCapTimer;
 void Init() {
-    SDLRenderer::Init();
     sys = new Smol16();
     sys->Init();
+
+    SDLRenderer::Init();
+    Sound * snd = Sound::instance();
+    snd->Init();
     SDLRenderer::LoadFont();
 }
 

@@ -23,14 +23,13 @@ const uint8_t defaultPalette[256 * 3] = {
     0x83,0x76,0x9C,
     0xFF,0x77,0xA8,
     0xFF,0xCC,0xAA,
-    0x00,0x00,0x00,
-    0xAC,0xBC,0xDE,
+    0x00,0x00,0x00
 };
 
 
 Display * Display::m_instance;
-static Memory * mem_instance;
-int Display::scale = 3;
+Memory * Display::mem_instance;
+int Display::scale = 1;
 Display * Display::instance()
 {
    if(!m_instance) {m_instance = new Display();}
@@ -44,6 +43,7 @@ Display::Display() {
     sys->Register("cls", Display::Lua_Clear);
     sys->Register("palette_reset", Display::Lua_PaletteReset);
     sys->Register("_to_bgr", Display::Lua_RGBToBGR15);
+    sys->Register("gfx_hw_rect", Display::Lua_DrawRect);
     mem_instance = Memory::instance();
 }
 
@@ -91,4 +91,12 @@ void Display::Lua_Clear(int color) {
 }
 void Display::Lua_PaletteReset() {
     instance()->PaletteReset();
+}
+
+void Display::Lua_DrawRect(int x0, int y0, int x1, int y1, int color) {
+    for(int y = y0; y < y1; y++) {
+        for(int x = x0; x < x1; x++) {
+            m_instance->PutPixel(x, y, (uint8_t)color);
+        }
+    }
 }

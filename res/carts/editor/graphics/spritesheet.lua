@@ -2,7 +2,7 @@ SpriteSheetEditor = Panel:extend()
 
 function SpriteSheetEditor:new()
   SpriteSheetEditor.super:new()
-  self:SetBounds(0, 32, 8 * 8, 64 + 8)
+  self:SetBounds(0, 32, 8 * 8, 128 + 8)
   self.title = "Spritesheet"
   self.window_color = 13
   self.window_text = 7
@@ -11,7 +11,7 @@ end
 
 function SpriteSheetEditor:DrawContent()
   local sprites_per_line = floor(self.w / 8)
-  local sprites_on_screen = 8
+  local sprites_on_screen = floor((self.h - 8) / 8)
   local sprite_index = self.scroll_index * sprites_per_line
 
   local x = 0
@@ -34,7 +34,7 @@ function SpriteSheetEditor:DrawContent()
     end
 
     sprite_index = sprite_index + 1
-  until sprite_index == 255
+  until sprite_index == 256
   x = self.x
   y = self.y + self.h - 8
   local sprite = {
@@ -57,10 +57,10 @@ function SpriteSheetEditor:UpdateContent()
   local inBounds = self:InBounds(mouse.x, mouse.y)
   if inBounds then
     --Spritesheet scrolling
-    if btnp(0) then
+    if btn(0) then
       self.scroll_index = self.scroll_index - 1
     end
-    if btnp(2) then
+    if btn(2) then
       self.scroll_index = self.scroll_index + 1
     end
     if self.scroll_index < 0 then self.scroll_index = 0 end

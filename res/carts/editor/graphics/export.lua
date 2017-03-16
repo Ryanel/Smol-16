@@ -39,6 +39,7 @@ function GraphicsExporter:UpdateContent()
       until y == 8
       print("}")
       print("===========END EXPORT===========")
+      dialog:ShowDialog("Export complete", "Check the console!")
     end
 
     if lx > 16 and lx <= 16 + 19 then -- CART

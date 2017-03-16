@@ -17,7 +17,7 @@ function ModeSwitcher:DrawContent()
 
   -- Draw modes
   local modes = 0
-  local x = 0
+  local x = 1
   local y = 0
   repeat
     if(modes == 0) then
@@ -89,7 +89,7 @@ function ModeSwitcher:DrawContent()
   until modes == self.total_modes
   -- Selection
   if(self:InBounds(mouse.x, mouse.y)) then
-    local mode = floor(mouse.x / 8)
+    local mode = floor(mouse.x / 8) - 1
     if(editor_modes[mode] == nil) then return end
 
     -- Tooltip
@@ -106,7 +106,7 @@ end
 function ModeSwitcher:UpdateContent()
 
   if btnp(9) and self:InBounds(mouse.x, mouse.y) then
-    local mode_to_switch = floor(mouse.x / 8)
+    local mode_to_switch = floor(mouse.x / 8) - 1
     if(editor_modes[mode_to_switch] == nil) then return end
 
     editor_modes[editor_mode]:Hide()

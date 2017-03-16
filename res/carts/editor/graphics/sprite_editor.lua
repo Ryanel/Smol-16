@@ -4,7 +4,7 @@ local zooms = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26}
 
 function SpriteEditor:new()
   SpriteEditor.super:new()
-  self.zoom_level = 1
+  self.zoom_level = 8
   self:SetBounds(96, 32, 64, 128 + 8)
 
   self.title = "Sprite Editor"

@@ -2,7 +2,7 @@ Palette = Panel:extend()
 
 function Palette:new()
   Palette.super:new()
-  self:SetBounds(0,224 - (24 + 9),256,24)
+  self:SetBounds(0,224 - (24),256,24)
   self.title = "Palette"
   self.window_color = 5
   self.window_text = 10

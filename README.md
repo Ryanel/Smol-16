@@ -1,6 +1,6 @@
 # Smol-16
 
-Smol-16 is a fantasy game console, inspired by [Pico-8](http://www.lexaloffle.com/pico-8.php).
+Smol-16 is a fantasy game console, inspired by [Pico-8](http://www.lexaloffle.com/pico-8.php). It is not made by laxaloffle.
 However, it's not a clone, but more or a "decendant". If the Pico-8 is the NES, then the Smol-16 is like the SNES.
 
 ![Smol-16, running the sprite editor](docs/screenshots/sprite_editor_1.png)
@@ -14,6 +14,7 @@ Smol-16 is in early development! Be wary about using it (though do contribute an
 * 256 x 224 pixel display (SNES resolution)
 * 256 color palette (BGR-15 programmable)
 * Program code is in Lua, no token limits
+* 8 channel sound, sampled at 48khz
 
 ## Features
 * A Lua standard library, editable by the user.

@@ -84,7 +84,7 @@ int main (int argc, char *argv[]) {
         main->info("Loading cart {}",options["input"].as<std::string>());
         file = options["input"].as<std::string>();
     } else {
-        file = "carts/shell";
+        file = "carts/editor";
     }
 
     Init();

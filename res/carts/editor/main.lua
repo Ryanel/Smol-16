@@ -15,7 +15,7 @@ require("mouse.lua")
 
 local cpu_adverage = {}
 local cpu_adverage_index = 0
-local cpu_adverage_samples = 60
+local cpu_adverage_samples = 30
 
 sprite_editor_ctx = {
   selected_sprite = 0,
@@ -38,7 +38,7 @@ function _init()
 
   local i = 0
   repeat
-    cpu_adverage[i] = 0
+    cpu_adverage[i] = stat_cpu()
     i = i + 1
   until i == cpu_adverage_samples
 end
@@ -59,10 +59,6 @@ function _update()
   if(cpu_adverage_index == cpu_adverage_samples) then
     cpu_adverage_index = 0
   end
-
-  if(btnp(0)) then
-    dialog:ShowDialog("Hello", "You pressed up!")
-  end
 end
 
 function _draw()
@@ -70,11 +66,12 @@ function _draw()
 
   --Draw cpu
   set_color(7)
-  draw_cpu()
+
   editor_modes[editor_mode]:Draw()
   mode_switcher:Draw()
   dialog:Draw()
   mouse:draw()
+  draw_cpu()
   flip()
 end
 
@@ -86,6 +83,6 @@ function draw_cpu()
     i = i + 1
   until i == cpu_adverage_samples
   cpu_adv = cpu_adv / cpu_adverage_samples
-  draw_string("CPU: "..stat_cpu() .. "%", 8, 224 - 7)
-  draw_string("| AVG CPU: "..round(cpu_adv*100)*0.01 .. "%", 64, 224 - 7)
+  set_color(7)
+  draw_string("AVG CPU: "..round(cpu_adv*100)*0.01 .. "%", 200, 1)
 end

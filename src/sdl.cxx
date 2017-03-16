@@ -136,6 +136,8 @@ void SDLRenderer::LoadFont() {
     _logger->info("Font loaded from data/font.png");
 }
 
+bool hasPressedKeyPlus = false;
+bool hasPressedKeyMinus = false;
 
 void SDLRenderer::EventLoop() {
 
@@ -147,6 +149,29 @@ void SDLRenderer::EventLoop() {
     	if (e.type == SDL_QUIT){
     		sys->isRunning = false;
     	}
+
+        if(keys[SDL_SCANCODE_KP_PLUS]) {
+            if(!hasPressedKeyPlus) {
+                Display::scale++;
+                SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
+                hasPressedKeyPlus = true;
+            }
+        }
+        else {
+            hasPressedKeyPlus = false;
+        }
+
+        if(keys[SDL_SCANCODE_KP_MINUS]) {
+            if(!hasPressedKeyMinus) {
+                if(Display::scale > 1) {Display::scale--;}
+
+                SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
+                hasPressedKeyMinus = true;
+            }
+        }
+        else {
+            hasPressedKeyMinus = false;
+        }
 
         input->SetButton(BUTTON_UP, keys[SDL_SCANCODE_UP]);
         input->SetButton(BUTTON_RIGHT, keys[SDL_SCANCODE_RIGHT]);

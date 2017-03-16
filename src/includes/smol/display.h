@@ -34,4 +34,5 @@ public:
     static void Lua_PaletteReset();
     static int Lua_RGBToBGR15(int r, int g, int b) ;
     static void Lua_DrawRect(int x, int y, int w, int h, int color);
+    static void Lua_PutPixel(int x, int y, int c);
 };

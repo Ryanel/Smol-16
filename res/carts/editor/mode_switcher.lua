@@ -93,11 +93,11 @@ function ModeSwitcher:DrawContent()
 
     end
 
-    if (editor_mode == modes and global_timer % 30 > 15) then
+    if (editor_mode == modes and global_timer % 60 > 45) then
       set_color(7)
       gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 1)
       gfx_rect(self.x + (x * 8), self.y + (y * 8) + 7,self.x + (x * 8) + 8, self.y + (y * 8) + 8)
-      gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8), self.y + (y * 8) + 8)
+      gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 1, self.y + (y * 8) + 8)
       gfx_rect(self.x + (x * 8) + 7, self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 8)
     end
     x = x + 1

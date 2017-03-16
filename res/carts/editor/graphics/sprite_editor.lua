@@ -49,7 +49,7 @@ function SpriteEditor:DrawContent()
 end
 
 function SpriteEditor:UpdateContent()
-  local inBounds = self:InBounds(mouse.x, mouse.y)
+  local inBounds = self:InBounds(mouse.x, mouse.y) and self.panel_global.being_dragged == nil
   if inBounds then
     if btn(9) and mouse.y - self.y > 8 then
       local scale = self.w / 8

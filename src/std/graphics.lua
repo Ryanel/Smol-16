@@ -12,13 +12,10 @@ end
 
 function set_pixel(x, y, c)
   if(c == 0) then return end
-  if(x > 255 or x < 0) then return end
-  if(y > 223 or y < 0) then return end
   if (c == nil) then
     c = peek8(mem_videoregs + 0x50)
   end
-  local index = (y * screenWidth) + x
-  poke8(index + mem_vram, c)
+  gfx_hw_pix(x,y,c)
 end
 
 function color(c)

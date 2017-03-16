@@ -44,6 +44,7 @@ Display::Display() {
     sys->Register("palette_reset", Display::Lua_PaletteReset);
     sys->Register("_to_bgr", Display::Lua_RGBToBGR15);
     sys->Register("gfx_hw_rect", Display::Lua_DrawRect);
+    sys->Register("gfx_hw_pix", Display::Lua_PutPixel);
     mem_instance = Memory::instance();
 }
 
@@ -99,4 +100,8 @@ void Display::Lua_DrawRect(int x0, int y0, int x1, int y1, int color) {
             m_instance->PutPixel(x, y, (uint8_t)color);
         }
     }
+}
+
+void Display::Lua_PutPixel(int x, int y, int color) {
+    m_instance->PutPixel(x, y, (uint8_t)color);
 }

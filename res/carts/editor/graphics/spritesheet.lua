@@ -22,7 +22,7 @@ function SpriteSheetEditor:DrawContent()
       set_color(0)
       gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 1)
       gfx_rect(self.x + (x * 8), self.y + (y * 8) + 7,self.x + (x * 8) + 8, self.y + (y * 8) + 8)
-      gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8), self.y + (y * 8) + 8)
+      gfx_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 1, self.y + (y * 8) + 8)
       gfx_rect(self.x + (x * 8) + 7, self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 8)
     end
     if x == sprites_per_line - 1 then
@@ -54,7 +54,7 @@ function SpriteSheetEditor:DrawContent()
 end
 
 function SpriteSheetEditor:UpdateContent()
-  local inBounds = self:InBounds(mouse.x, mouse.y)
+  local inBounds = self:InBounds(mouse.x, mouse.y) and self.panel_global.being_dragged == nil
   if inBounds then
     --Spritesheet scrolling
     if btn(0) then

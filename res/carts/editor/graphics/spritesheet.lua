@@ -2,7 +2,7 @@ SpriteSheetEditor = Panel:extend()
 
 function SpriteSheetEditor:new()
   SpriteSheetEditor.super:new()
-  self:SetBounds(0, 32, 8 * 8, 128 + 8)
+  self:SetBounds(0, 32, 8 * 8, 64 + 8)
   self.title = "Spritesheet"
   self.window_color = 13
   self.window_text = 7
@@ -11,7 +11,7 @@ end
 
 function SpriteSheetEditor:DrawContent()
   local sprites_per_line = floor(self.w / 8)
-  local sprites_on_screen = 16
+  local sprites_on_screen = 8
   local sprite_index = self.scroll_index * sprites_per_line
 
   local x = 0
@@ -36,8 +36,19 @@ function SpriteSheetEditor:DrawContent()
     sprite_index = sprite_index + 1
   until sprite_index == 255
   x = self.x
-  y = self.y + 128
-  set_pixel(2+x,0+y,16);set_pixel(3+x,0+y,16);set_pixel(4+x,0+y,16);set_pixel(5+x,0+y,16);set_pixel(1+x,1+y,16);set_pixel(2+x,1+y,8);set_pixel(3+x,1+y,10);set_pixel(4+x,1+y,10);set_pixel(5+x,1+y,8);set_pixel(6+x,1+y,16);set_pixel(0+x,2+y,16);set_pixel(1+x,2+y,8);set_pixel(2+x,2+y,8);set_pixel(3+x,2+y,10);set_pixel(4+x,2+y,10);set_pixel(5+x,2+y,8);set_pixel(6+x,2+y,8);set_pixel(7+x,2+y,16);set_pixel(0+x,3+y,16);set_pixel(1+x,3+y,8);set_pixel(2+x,3+y,8);set_pixel(3+x,3+y,10);set_pixel(4+x,3+y,10);set_pixel(5+x,3+y,8);set_pixel(6+x,3+y,8);set_pixel(7+x,3+y,16);set_pixel(0+x,4+y,16);set_pixel(1+x,4+y,8);set_pixel(2+x,4+y,8);set_pixel(3+x,4+y,8);set_pixel(4+x,4+y,8);set_pixel(5+x,4+y,8);set_pixel(6+x,4+y,8);set_pixel(7+x,4+y,16);set_pixel(0+x,5+y,16);set_pixel(1+x,5+y,8);set_pixel(2+x,5+y,8);set_pixel(3+x,5+y,10);set_pixel(4+x,5+y,10);set_pixel(5+x,5+y,8);set_pixel(6+x,5+y,8);set_pixel(7+x,5+y,16);set_pixel(1+x,6+y,16);set_pixel(2+x,6+y,8);set_pixel(3+x,6+y,8);set_pixel(4+x,6+y,8);set_pixel(5+x,6+y,8);set_pixel(6+x,6+y,16);set_pixel(2+x,7+y,16);set_pixel(3+x,7+y,16);set_pixel(4+x,7+y,16);set_pixel(5+x,7+y,16);
+  y = self.y + self.h - 8
+  local sprite = {
+    0,0,16,16,16,16,0,0,
+    0,16,8,10,10,8,16,0,
+    16,8,8,10,10,8,8,16,
+    16,8,8,10,10,8,8,16,
+    16,8,8,10,10,8,8,16,
+    16,8,8,8,8,8,8,16,
+    0,16,8,10,10,8,16,0,
+    0,0,16,16,16,16,0,0,
+  }
+
+  spr_array(sprite, x, y)
   set_color(16)
   draw_string("CPU Hog!", x + 10, y + 2)
 end

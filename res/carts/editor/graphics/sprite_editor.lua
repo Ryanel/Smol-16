@@ -1,8 +1,12 @@
 SpriteEditor = Panel:extend()
 
+local zooms = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26}
+
 function SpriteEditor:new()
   SpriteEditor.super:new()
-  self:SetBounds(96, 32, 128, 128 + 8)
+  self.zoom_level = 1
+  self:SetBounds(96, 32, 64, 128 + 8)
+
   self.title = "Sprite Editor"
   self.sprite_index = 0
 end
@@ -29,6 +33,7 @@ function SpriteEditor:DrawContent()
 
       local scaled_x = sx0 * scale
       local scaled_y = sy0 * scale
+
       if(pix ~= 0) then
         draw_rect(dx0 + scaled_x, dy0 + scaled_y,dx0 + scaled_x + scale, dy0 + scaled_y + scale)
       else
@@ -53,5 +58,25 @@ function SpriteEditor:UpdateContent()
       local sel_y = floor(my / scale)
       spr_set(sprite_editor_ctx.selected_sprite, sel_x, sel_y, sprite_editor_ctx.selected_color)
     end
+    if(btnp(5)) then
+      self.zoom_level = self.zoom_level + 1
+      if(zooms[self.zoom_level] == nil) then self.zoom_level = self.zoom_level - 1 end
+    end
+    if(btnp(4)) then
+      self.zoom_level = self.zoom_level - 1
+      if(zooms[self.zoom_level] == nil) then self.zoom_level = self.zoom_level + 1 end
+    end
+  end
+  self.w = zooms[self.zoom_level] * 8
+  self.h = zooms[self.zoom_level] * 8 + 8
+
+  if(self.zoom_level < 2) then
+    self.title = "S"
+  end
+  if(self.zoom_level < 4 and self.zoom_level > 2) then
+    self.title = "Sprite"
+  end
+  if(self.zoom_level > 4) then
+    self.title = "Sprite Editor"
   end
 end

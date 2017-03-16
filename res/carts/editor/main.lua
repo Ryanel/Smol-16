@@ -6,6 +6,7 @@ cart_header = {
 
 require("object.lua")
 require("panel.lua")
+require("dialog.lua")
 require("editor_mode.lua")
 require("mode_switcher.lua")
 require("cart/editor_cart.lua")
@@ -47,13 +48,21 @@ function _update()
 
   editor_modes[editor_mode]:Update()
   mode_switcher:Update()
+  dialog:Update()
+
+  -- Update Global Timer
   global_timer = global_timer + 1
+
+  -- Update CPU Adverage
   cpu_adverage[cpu_adverage_index] = stat_cpu()
   cpu_adverage_index = cpu_adverage_index + 1
   if(cpu_adverage_index == cpu_adverage_samples) then
     cpu_adverage_index = 0
   end
 
+  if(btnp(0)) then
+    dialog:ShowDialog("Hello", "You pressed up!")
+  end
 end
 
 function _draw()
@@ -64,6 +73,7 @@ function _draw()
   draw_cpu()
   editor_modes[editor_mode]:Draw()
   mode_switcher:Draw()
+  dialog:Draw()
   mouse:draw()
   flip()
 end

@@ -8,7 +8,7 @@ function ModeSwitcher:new()
   self.nodrag_x = true
   self.nodrag_y = true
   self.minimisable = false
-  self.total_modes = 2
+  self.total_modes = 4
 end
 
 function ModeSwitcher:DrawContent()
@@ -21,12 +21,62 @@ function ModeSwitcher:DrawContent()
   local y = 0
   repeat
     if(modes == 0) then
-      set_pixel(0 + (x * 8),0,5); set_pixel(7 + (x * 8),0,5); set_pixel(1 + (x * 8),1,6); set_pixel(6 + (x * 8),1,6); set_pixel(2 + (x * 8),2,7); set_pixel(5 + (x * 8),2,7); set_pixel(2 + (x * 8),5,7); set_pixel(5 + (x * 8),5,7); set_pixel(1 + (x * 8),6,6); set_pixel(6 + (x * 8),6,6); set_pixel(0 + (x * 8),7,5); set_pixel(7 + (x * 8),7,5);
+      local sprite = {
+        10,5,10,5,10,5,10,0,
+        10,5,10,5,10,5,10,5,
+        5,5,5,5,5,5,5,5,
+        5,5,5,5,5,5,5,5,
+        5,5,5,5,5,5,5,5,
+        5,5,5,5,5,5,5,5,
+        5,5,5,5,5,5,5,5,
+        5,5,5,5,5,5,5,5,
+      }
+      spr_array(sprite, x * 8, 0)
     end
     if modes == 1 then
-      set_pixel(3 + (x * 8),0,8);set_pixel(4 + (x * 8),0,8);set_pixel(2 + (x * 8),1,8);set_pixel(3 + (x * 8),1,9);set_pixel(4 + (x * 8),1,9);set_pixel(5 + (x * 8),1,8);set_pixel(1 + (x * 8),2,8);set_pixel(2 + (x * 8),2,9);set_pixel(3 + (x * 8),2,9);set_pixel(4 + (x * 8),2,9);set_pixel(5 + (x * 8),2,9);set_pixel(6 + (x * 8),2,8);set_pixel(1 + (x * 8),3,9);set_pixel(2 + (x * 8),3,10);set_pixel(3 + (x * 8),3,10);set_pixel(4 + (x * 8),3,10);set_pixel(5 + (x * 8),3,10);set_pixel(6 + (x * 8),3,9);set_pixel(0 + (x * 8),4,9);set_pixel(1 + (x * 8),4,10);set_pixel(2 + (x * 8),4,10);set_pixel(3 + (x * 8),4,16);set_pixel(4 + (x * 8),4,10);set_pixel(5 + (x * 8),4,16);set_pixel(6 + (x * 8),4,10);set_pixel(7 + (x * 8),4,9);set_pixel(0 + (x * 8),5,9);set_pixel(1 + (x * 8),5,10);set_pixel(2 + (x * 8),5,10);set_pixel(3 + (x * 8),5,16);set_pixel(4 + (x * 8),5,10);set_pixel(5 + (x * 8),5,16);set_pixel(6 + (x * 8),5,10);set_pixel(7 + (x * 8),5,9);set_pixel(1 + (x * 8),6,9);set_pixel(2 + (x * 8),6,10);set_pixel(3 + (x * 8),6,10);set_pixel(4 + (x * 8),6,10);set_pixel(5 + (x * 8),6,10);set_pixel(6 + (x * 8),6,9);set_pixel(2 + (x * 8),7,9);set_pixel(3 + (x * 8),7,9);set_pixel(4 + (x * 8),7,9);set_pixel(5 + (x * 8),7,9);
-
+      local sprite = {
+        0,0,0,8,8,0,0,0,
+        0,0,8,9,9,8,0,0,
+        0,8,9,9,9,9,8,0,
+        0,9,10,10,10,10,9,0,
+        9,10,10,16,10,16,10,9,
+        9,10,10,16,10,16,10,9,
+        0,9,10,10,10,10,9,0,
+        0,0,9,9,9,9,0,0,
+      }
+      spr_array(sprite, x * 8, 0)
     end
+
+    if modes == 2 then
+      local sprite = {
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+        0,7,0,0,0,0,0,0,
+        0,0,7,0,0,0,0,0,
+        0,7,0,0,0,0,0,0,
+        0,0,0,0,7,7,0,0,
+        0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,
+      }
+
+      spr_array(sprite, x * 8, 0)
+    end
+
+    if modes == 3 then
+      local sprite = {
+        0,0,0,0,0,0,0,0,
+        0,7,7,7,7,7,7,0,
+        0,6,0,0,6,0,0,0,
+        0,7,7,7,7,7,7,0,
+        0,0,6,5,0,6,0,0,
+        0,7,7,7,7,7,7,0,
+        0,6,0,6,5,0,6,0,
+        0,0,0,0,0,0,0,0,
+      }
+
+      spr_array(sprite, x * 8, 0)
+    end
+
     if (editor_mode == modes and global_timer % 30 > 15) then
       set_color(7)
       draw_rect(self.x + (x * 8), self.y + (y * 8),self.x + (x * 8) + 8, self.y + (y * 8) + 1)

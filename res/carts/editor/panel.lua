@@ -60,6 +60,17 @@ function Panel:Update()
   end
 end
 
+function Panel:DrawButton(x, y, w, h, str)
+  set_color(16)
+  local lx = self.x + x
+  local ly = self.y + y
+  draw_rect(lx, ly + 8, lx + w, ly + h + 8)
+  set_color(7)
+  draw_rect(lx + 1, ly + 9, lx + w - 1, ly + h + 7)
+  set_color(16)
+  draw_string(str,lx + 2, ly + 10)
+end
+
 function Panel:Draw()
   if self.visible == true then
     self:DrawTitlebar()
@@ -93,9 +104,13 @@ function Panel:UpdateContent() end
 function Panel:DrawContent() end
 
 function Panel:InBounds(x, y)
+  return self:InRect(x,y,self.x, self.y, self.w, self.h)
+end
+
+function Panel:InRect(x, y, rx, ry, rw, rh)
   local inside = false
-  if (x >= self.x and x <= self.x + self.w) then
-    if(y >= self.y and y <= self.y + self.h) then
+  if (x >= rx and x <= rx + rw) then
+    if(y >= ry and y <= ry + rh) then
       inside = true
     end
   end
@@ -114,7 +129,6 @@ function Panel:DragTitleBar()
         self.dragging_y = mouse.y - self.y
         self.dragging_is = true
       end
-
     end
   else
     if self:InBounds(mouse.x, mouse.y) then

@@ -143,6 +143,26 @@ function spr(num, dx0, dy0, width, height, flip_x, flip_y ,pal)
 
 end
 
+function spr_array(sprite, dx0, dy0)
+  local sx0 = 1
+  local sy0 = 0
+  -- Draw index
+  local sx1 = 8 + 1
+  local sy1 = 8
+
+  repeat
+    repeat
+      local pix = sprite[(8 * sy0) + sx0]
+      if (pix == nil) then pix = 0 end
+      set_color(pix)
+      set_pixel(sx0 + dx0 - 1, sy0 + dy0, pix)
+      sx0 = sx0 + 1
+    until sx0 == sx1
+    sx0 = 1
+    sy0 = sy0 + 1
+  until sy0 == sy1
+end
+
 function spr_set(num, x, y, c)
   poke8(0x20000 + (num * 64) + (8 * y) + x, c)
 end

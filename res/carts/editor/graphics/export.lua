@@ -12,17 +12,6 @@ function GraphicsExporter:new()
   self.export_mode = 0
 end
 
-function GraphicsExporter:DrawButton(x, y, w, h, str)
-  set_color(16)
-  local lx = self.x + x
-  local ly = self.y + y
-  draw_rect(lx, ly + 8, lx + w, ly + h + 8)
-  set_color(7)
-  draw_rect(lx + 1, ly + 9, lx + w - 1, ly + h + 7)
-  set_color(16)
-  draw_string(str,lx + 2, ly + 10)
-end
-
 function GraphicsExporter:DrawContent()
   self:DrawButton(0,0, 16,9, "Lua")
   self:DrawButton(16,0, 19,9, "Cart")
@@ -34,22 +23,21 @@ function GraphicsExporter:UpdateContent()
     local lx = mouse.x - self.x
     if lx <= 16 then -- LUA
       print("==========BEGIN EXPORT==========")
-
-      local func = "set_pixel("
+      print("local sprite = {")
       local x = 0
       local y = 0
+      local vals = {0,0,0,0,0,0,0,0,0}
       repeat
         repeat
           local c = spr_get(sprite_editor_ctx.selected_sprite, x, y)
-          if c ~= 0 and c ~= nil then
-            print(func .. x .. "," .. y .. "," .. c ..")")
-          end
+          vals[x] = c
           x = x + 1
         until x == 8
+        print(vals[0] .. "," .. vals[1] .. "," .. vals[2] .. "," .. vals[3] .. "," .. vals[4] .. "," .. vals[5] .. "," .. vals[6] .. "," .. vals[7] .. ",")
         x = 0
         y = y + 1
       until y == 8
-
+      print("}")
       print("===========END EXPORT===========")
     end
 

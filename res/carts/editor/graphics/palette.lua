@@ -5,7 +5,7 @@ function Palette:new()
   self:SetBounds(0,224 - (24 + 9),256,24)
   self.title = "Palette"
   self.window_color = 5
-  self.window_text = 8
+  self.window_text = 10
   self.cursor = {}
   self.cursor.index = 0
   self.cursor.color = 7

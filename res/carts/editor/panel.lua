@@ -21,6 +21,9 @@ function Panel:new(x, y, w, h)
   self.minimised = false
   self.minimisable = true
   self.visible = true
+  self.panel_global = {
+    being_dragged = nil
+  }
 end
 
 function Panel:SetBounds(x, y, w, h)
@@ -103,19 +106,24 @@ function Panel:DragTitleBar()
   if(self.no_chrome) then return end -- Nothing to drag, abort.
   if btn(9) and self:InBounds(mouse.x, mouse.y) then
     -- Determine if we're on the title bar
-    if mouse.y - self.y < 8 then
+    if mouse.y - self.y < 8 and (self.panel_global.being_dragged == nil or self.panel_global.being_dragged == self) then
       if self.dragging_is == false then
+        self.panel_global.being_dragged = self
         -- We just start dragging
         self.dragging_x = mouse.x - self.x
         self.dragging_y = mouse.y - self.y
         self.dragging_is = true
       end
-      if self.nodrag_y == false then self.y = mouse.y - self.dragging_y end
-      if self.nodrag_x == false then self.x = mouse.x - self.dragging_x end
+
     end
   else
     if self:InBounds(mouse.x, mouse.y) then
       self.dragging_is = false
+      self.panel_global.being_dragged = nil
     end
+  end
+  if self.dragging_is == true then
+    if self.nodrag_y == false then self.y = mouse.y - self.dragging_y end
+    if self.nodrag_x == false then self.x = mouse.x - self.dragging_x end
   end
 end

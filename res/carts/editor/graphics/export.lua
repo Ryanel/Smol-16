@@ -7,9 +7,8 @@ function GraphicsExporter:new()
   self:SetBounds(256 - width, 8, width, height)
   self.title = "Exporter"
   self.window_color = 5
-  self.window_text = 8
-  self.scroll_index = 0
-  self.minimised = false
+  self.window_text = 9
+  self.minimised = true
   self.export_mode = 0
 end
 

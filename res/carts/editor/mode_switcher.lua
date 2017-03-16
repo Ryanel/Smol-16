@@ -44,7 +44,7 @@ function ModeSwitcher:DrawContent()
 
     -- Tooltip
     set_color(0)
-    local x = mouse.x + 8
+    local x = mouse.x + 4
     local y = mouse.y + 8
     local str = editor_modes[mode].name
     draw_rect(x, y, x + string.len(str) * 4 + 4, y + 8)

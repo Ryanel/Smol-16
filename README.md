@@ -22,3 +22,7 @@ Smol-16 is in early development! Be wary about using it (though do contribute an
 
 ## Quirks
 * Color 0 is transparent for sprite operations, but black. (Color 16 is also black)
+
+# TODO
+* Allow multiple sprites edited at once
+* Finish Text Input

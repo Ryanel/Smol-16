@@ -67,6 +67,10 @@ function draw_line(x0, y0, x1, y1)
 end
 
 function draw_string(str, x, y, rel_size)
+  if str == "" then
+    return
+  end
+
   if not rel_size then rel_size = 1 end
   local index = 1
   local draw_x = x

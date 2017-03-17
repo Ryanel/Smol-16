@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <cstring>
+#include <string>
 
 #define BUTTON_UP 0
 #define BUTTON_RIGHT 1
@@ -18,13 +20,18 @@
 class Input {
 private:
     static Input * m_instance;
+
     Input();
     bool buttonStates[NUM_BUTTONS];
     bool buttonStatesLast[NUM_BUTTONS];
 public:
     static Input *instance();
-    // Last keyboard keycode entered.
-    char keyboardKeycode = 0x00;
+
+    static std::string input_text;
+    static bool lastchar_submit;
+    int mouseX = 0;
+    int mouseY = 0;
+
     bool GetButtonDown(int code);
     bool GetButtonPress(int code);
     bool SetButton(int code, bool value);
@@ -33,11 +40,15 @@ public:
     static bool LuaGetBtnDown(int code);
     static bool LuaGetBtnPress(int code);
 
-    int mouseX = 0;
-    int mouseY = 0;
 
+    static void LuaEnableTextInput();
+    static void LuaDisableTextInput();
     static int LuaGetMouseX();
     static int LuaGetMouseY();
     static bool LuaGetMouseBtn1();
     static bool LuaGetMouseBtn2();
+    static std::string LuaGetTextInput();
+    static std::string LuaFlushTextInput();
+    static std::string LuaFlushFullInput();
+    static bool LuaTextLastConfirm();
 };

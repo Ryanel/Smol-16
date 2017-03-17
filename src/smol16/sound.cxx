@@ -26,7 +26,7 @@ void Sound::Init() {
         exit(-1);
     }
 
-    result = Mix_AllocateChannels(8);
+    result = Mix_AllocateChannels(10);
     if( result < 0 )
     {
         fprintf(stderr, "Unable to allocate mixing channels: %s\n", SDL_GetError());
@@ -46,5 +46,6 @@ void Sound::LuaLoadSample(int id, std::string path) {
     Sound::instance()->LoadSample(id, path);
 }
 void Sound::LuaPlaySFX(int id) {
-    Sound::instance()->PlaySFX(-1, id);
+
+    Sound::instance()->PlaySFX(8, id); //SFX's play on Channel 8 + 9
 }

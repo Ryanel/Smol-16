@@ -1,11 +1,14 @@
 local width = 256
-local height = 224
+local height = 224 - 64
 
 local ui_config = {
   row = {
     width = 11,
-    main_row = 11,
+    main_row = 9,
     height = 8
+  },
+  tracks = {
+    num = 8
   }
 }
 PatternPanel = Panel:extend()
@@ -23,17 +26,17 @@ function PatternPanel:new()
 end
 
 function PatternPanel:DrawChrome()
-  local step = (width - ui_config.row.width) / 6
+  local step = (width - ui_config.row.width) / ui_config.tracks.num
   local i = 0
   repeat
     local x = round((i * step) + self.x + ui_config.row.width)
-    local y = 8 + self.y
+    local y = self.y
     repeat
       set_pixel(x,y,5)
       y = y + 1
     until y == self.y + self.h
     i = i + 1
-  until i == 7
+  until i == ui_config.tracks.num + 1
   self:DrawRowNums()
 end
 
@@ -43,11 +46,11 @@ function PatternPanel:DrawRowNums()
   set_color(16)
   repeat
     if pat_num >= 0 then
-      draw_string(string.format("%02X",pat_num),2, self.y + r_index * ui_config.row.height + 9)
+      draw_string(string.format("%02X",pat_num),2, self.y + r_index * ui_config.row.height + 2)
     end
     r_index = r_index + 1
     pat_num = pat_num + 1
-  until pat_num > ctx_music.row_max
+  until pat_num >= ctx_music.row_max
 end
 
 function PatternPanel:DrawContent()
@@ -57,19 +60,21 @@ end
 
 function PatternPanel:DrawCurrentRow()
   local x = 0
-  local y = self.y + (ui_config.row.main_row*ui_config.row.height) + 8
+  local y = self.y + (ui_config.row.main_row*ui_config.row.height)
   repeat
 
-    set_pixel(x,y - 1,8)
-    set_pixel(x,y + ui_config.row.height - 1,8)
+    set_pixel(x,y,8)
+    set_pixel(x,y + ui_config.row.height,8)
     x = x + 1
   until x == 256
 end
 
 function PatternPanel:UpdateContent()
-  if ctx_music.row > ctx_music.row_max then
-    ctx_music.row = 0
-  else
-    ctx_music.row = ctx_music.row + 1
+  if(global_timer % 4 == 0) then
+    if ctx_music.row >= ctx_music.row_max then
+      ctx_music.row = 0
+    else
+      ctx_music.row = ctx_music.row + 1
+    end
   end
 end

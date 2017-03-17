@@ -34,12 +34,20 @@ end
 function _init()
   cls(1)
   palette_reset()
+  text_start()
 end
+
+text = ""
 
 function _update()
   timer = timer + 1
   doInput()
   updateCursor()
+  text = text_get()
+  if (text_submit()) then
+    text = text_flushf()
+  end
+
 end
 
 -- Drawing functions
@@ -55,7 +63,7 @@ end
 function _draw()
   cls(0) -- Clear screen
   set_color(7) -- Set default color to white
-  draw_string("$> Hello, Console!", 0, 0)
+  draw_string(text, 0, 0)
   drawCursor() -- Draw cursor
   set_color(7)
   draw_string("CPU: "..stat_cpu() .. "%", 8, 224 - 8)

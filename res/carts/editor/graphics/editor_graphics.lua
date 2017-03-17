@@ -1,5 +1,13 @@
 EditorGraphics = EditorMode:extend()
 
+sprite_editor_ctx = {
+  selected_sprite = 0,
+  selected_sprite_width = 1,
+  selected_sprite_height = 1,
+  palette = -1,
+  selected_color = 0
+}
+
 require("graphics/palette.lua")
 require("graphics/sprite_editor.lua")
 require("graphics/spritesheet.lua")

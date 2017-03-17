@@ -1,10 +1,12 @@
 #include <cstring>
+#include <string>
 #include <color.h>
 #include <smol/input.h>
 #include <smol/smol16.h>
-
+#include <SDL.h>
 Input * Input::m_instance;
-
+std::string Input::input_text;
+bool Input::lastchar_submit = false;
 Input * Input::instance()
 {
    if(!m_instance) {m_instance = new Input();}
@@ -16,6 +18,12 @@ Input::Input() {
     sys->Register("btnp", &Input::LuaGetBtnPress);
     sys->Register("_get_mouse_x", &Input::LuaGetMouseX);
     sys->Register("_get_mouse_y", &Input::LuaGetMouseY);
+    sys->Register("text_start", &Input::LuaEnableTextInput);
+    sys->Register("text_end", &Input::LuaDisableTextInput);
+    sys->Register("text_get", &Input::LuaGetTextInput);
+    sys->Register("text_flush", &Input::LuaFlushTextInput);
+    sys->Register("text_flushf", &Input::LuaFlushFullInput);
+    sys->Register("text_submit", &Input::LuaTextLastConfirm);
 }
 
 // Is the button down NOW?
@@ -65,4 +73,37 @@ bool Input::LuaGetMouseBtn1() {
 
 bool Input::LuaGetMouseBtn2() {
     return false;
+}
+
+void Input::LuaEnableTextInput() {
+    SDL_StartTextInput();
+}
+
+
+void Input::LuaDisableTextInput() {
+    SDL_StopTextInput();
+}
+
+
+std::string Input::LuaFlushTextInput() {
+    std::string ret = input_text;
+    input_text = "";
+    lastchar_submit = false;
+    return ret;
+}
+
+std::string Input::LuaGetTextInput() {
+    std::string ret = input_text;
+    return ret;
+}
+
+std::string Input::LuaFlushFullInput() {
+    if(lastchar_submit == true) {
+        return LuaFlushTextInput();
+    }
+    return "";
+}
+
+bool Input::LuaTextLastConfirm() {
+    return lastchar_submit;
 }

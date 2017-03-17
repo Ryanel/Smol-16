@@ -6,6 +6,7 @@
 #include <smol/display.h>
 #include <smol/smol16.h>
 #include <smol/input.h>
+#include <cstring>
 SDL_Window *SDLRenderer::win;
 SDL_Renderer *SDLRenderer::ren;
 SDL_Texture *SDLRenderer::display;
@@ -144,18 +145,38 @@ void SDLRenderer::EventLoop() {
     const uint8_t *keys = SDL_GetKeyboardState(NULL);
     Input * input = Input::instance();
     SDL_Event e;
-    while (SDL_PollEvent(&e)){
+    while (SDL_PollEvent(&e) == 1){
     	//If user closes the window
     	if (e.type == SDL_QUIT){
     		sys->isRunning = false;
+            break;
     	}
 
+        if(e.type == SDL_TEXTINPUT ) {
+            //Not copy or pasting
+            if( !(  ( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) &&
+                    ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) &&
+                    SDL_GetModState() & KMOD_CTRL ) ) {
+                //Append character
+                Input::input_text += e.text.text;
+            }
+        }
+        if(keys[SDL_SCANCODE_BACKSPACE]) {
+            if(Input::input_text.length() != 0) {
+                Input::input_text.pop_back();
+            }
+        }
+        if(keys[SDL_SCANCODE_RETURN]) {
+            Input::lastchar_submit = true;
+        }
+        
         if(keys[SDL_SCANCODE_KP_PLUS]) {
             if(!hasPressedKeyPlus) {
                 Display::scale++;
                 SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
                 hasPressedKeyPlus = true;
             }
+            break;
         }
         else {
             hasPressedKeyPlus = false;
@@ -168,6 +189,7 @@ void SDLRenderer::EventLoop() {
                 SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
                 hasPressedKeyMinus = true;
             }
+            break;
         }
         else {
             hasPressedKeyMinus = false;

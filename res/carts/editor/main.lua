@@ -22,14 +22,6 @@ local cpu_adverage = {}
 local cpu_adverage_index = 0
 local cpu_adverage_samples = 30
 
-sprite_editor_ctx = {
-  selected_sprite = 0,
-  palette = -1,
-  selected_color = 0
-}
-cart_editor_ctx = {
-  cart_name = ""
-}
 function _init()
   palette_reset()
 

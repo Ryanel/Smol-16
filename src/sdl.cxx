@@ -7,9 +7,10 @@
 #include <smol/smol16.h>
 #include <smol/input.h>
 #include <cstring>
-SDL_Window *SDLRenderer::win;
+
+SDL_Window   *SDLRenderer::win;
 SDL_Renderer *SDLRenderer::ren;
-SDL_Texture *SDLRenderer::display;
+SDL_Texture  *SDLRenderer::display;
 std::shared_ptr<spdlog::logger> SDLRenderer::_logger;
 
 uint8_t GetFromBuffer(uint32_t * buf, int x, int y, int width) {
@@ -139,72 +140,72 @@ void SDLRenderer::LoadFont() {
 
 bool hasPressedKeyPlus = false;
 bool hasPressedKeyMinus = false;
-
+const uint8_t *keys;
 void SDLRenderer::EventLoop() {
-
-    const uint8_t *keys = SDL_GetKeyboardState(NULL);
+    keys = SDL_GetKeyboardState(NULL);
     Input * input = Input::instance();
     SDL_Event e;
     while (SDL_PollEvent(&e) == 1){
-    	//If user closes the window
-    	if (e.type == SDL_QUIT){
-    		sys->isRunning = false;
+        switch (e.type) {
+        case SDL_QUIT:
+            sys->isRunning = false;
             break;
-    	}
-
-        if(e.type == SDL_TEXTINPUT ) {
-            //Not copy or pasting
-            if( !(  ( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) &&
-                    ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) &&
-                    SDL_GetModState() & KMOD_CTRL ) ) {
-                //Append character
-                Input::input_text += e.text.text;
-            }
-        }
-        if(keys[SDL_SCANCODE_BACKSPACE]) {
-            if(Input::input_text.length() != 0) {
-                Input::input_text.pop_back();
-            }
-        }
-        if(keys[SDL_SCANCODE_RETURN]) {
-            Input::lastchar_submit = true;
-        }
-        
-        if(keys[SDL_SCANCODE_KP_PLUS]) {
-            if(!hasPressedKeyPlus) {
-                Display::scale++;
-                SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
-                hasPressedKeyPlus = true;
-            }
+        case SDL_TEXTINPUT:
+            HandleTextInput(e);
             break;
         }
-        else {
-            hasPressedKeyPlus = false;
+        HandleInput(e);
+    }
+}
+
+void SDLRenderer::HandleTextInput(SDL_Event ev)
+{
+    SDL_Event e = ev;
+    if(!(( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) &&
+        ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) &&
+            SDL_GetModState() & KMOD_CTRL ) ) {
+        //Append character
+        Input::input_text += e.text.text;
+    }
+}
+
+void SDLRenderer::HandleInput(SDL_Event ev) {
+    Input * input = Input::instance();
+    input->SetButton(BUTTON_UP, keys[SDL_SCANCODE_UP]);
+    input->SetButton(BUTTON_RIGHT, keys[SDL_SCANCODE_RIGHT]);
+    input->SetButton(BUTTON_DOWN, keys[SDL_SCANCODE_DOWN]);
+    input->SetButton(BUTTON_LEFT, keys[SDL_SCANCODE_LEFT]);
+    input->SetButton(BUTTON_A, keys[SDL_SCANCODE_Z]);
+    input->SetButton(BUTTON_B, keys[SDL_SCANCODE_X]);
+    input->SetButton(BUTTON_X, keys[SDL_SCANCODE_A]);
+    input->SetButton(BUTTON_Y, keys[SDL_SCANCODE_S]);
+    input->SetButton(BUTTON_LMB, (SDL_GetMouseState(&input->mouseX,
+                     &input->mouseY) & SDL_BUTTON(SDL_BUTTON_LEFT)) > 0);
+
+    if(keys[SDL_SCANCODE_BACKSPACE] && (Input::input_text.length() != 0)) {
+        Input::input_text.pop_back();
+    }
+    if(keys[SDL_SCANCODE_RETURN]) { Input::lastchar_submit = true;}
+
+    if(keys[SDL_SCANCODE_KP_PLUS]) {
+        if(!hasPressedKeyPlus) {
+            Display::scale++;
+            SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
+            hasPressedKeyPlus = true;
         }
+    }
+    else {
+        hasPressedKeyPlus = false;
+    }
 
-        if(keys[SDL_SCANCODE_KP_MINUS]) {
-            if(!hasPressedKeyMinus) {
-                if(Display::scale > 1) {Display::scale--;}
-
-                SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
-                hasPressedKeyMinus = true;
-            }
-            break;
+    if(keys[SDL_SCANCODE_KP_MINUS]) {
+        if(!hasPressedKeyMinus) {
+            if(Display::scale > 1) {Display::scale--;}
+            SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
+            hasPressedKeyMinus = true;
         }
-        else {
-            hasPressedKeyMinus = false;
-        }
-
-        input->SetButton(BUTTON_UP, keys[SDL_SCANCODE_UP]);
-        input->SetButton(BUTTON_RIGHT, keys[SDL_SCANCODE_RIGHT]);
-        input->SetButton(BUTTON_DOWN, keys[SDL_SCANCODE_DOWN]);
-        input->SetButton(BUTTON_LEFT, keys[SDL_SCANCODE_LEFT]);
-        input->SetButton(BUTTON_A, keys[SDL_SCANCODE_Z]);
-        input->SetButton(BUTTON_B, keys[SDL_SCANCODE_X]);
-        input->SetButton(BUTTON_X, keys[SDL_SCANCODE_A]);
-        input->SetButton(BUTTON_Y, keys[SDL_SCANCODE_S]);
-
-        input->SetButton(BUTTON_LMB, (SDL_GetMouseState(&input->mouseX,
-                         &input->mouseY) & SDL_BUTTON(SDL_BUTTON_LEFT)) > 0);
+    }
+    else {
+        hasPressedKeyMinus = false;
     }
 }

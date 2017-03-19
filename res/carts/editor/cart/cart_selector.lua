@@ -17,3 +17,7 @@ end
 function CartSelector:UpdateContent()
 
 end
+
+function LoadCart()
+  file_load_spritesheet(cart_info.cart_path .. cart_info.loaded_cart .. "/gfx/spr0.bin")
+end

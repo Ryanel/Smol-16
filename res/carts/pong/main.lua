@@ -30,7 +30,9 @@
 cart_header = {
   name = "Pong"
 }
+
 load_sample(0)
+file_load_spritesheet("carts/pong/gfx/spr0.bin")
 l = {
   x = 5,
   y = 50,
@@ -50,9 +52,9 @@ r = {
 }
 
 function do_ai(p, b)
-  if (b.y < p.y + p.h/2) then
+  if (b.y < p.y + p.h/5) then
     p.y = p.y - 1
-  elseif (b.y > p.y + p.h/2) then
+  elseif (b.y > p.y + p.h/5) then
     p.y = p.y + 1
   end
 end
@@ -63,8 +65,8 @@ function update_player(p, b)
   end
 
   if (not p.ai) then
-    if (btn(0, p.player)) then p.y = p.y - 1 end
-    if (btn(2, p.player)) then p.y = p.y + 1 end
+    if (btn(0, p.player)) then p.y = p.y - 2 end
+    if (btn(2, p.player)) then p.y = p.y + 2 end
   else
     do_ai(p, b)
   end
@@ -117,7 +119,7 @@ function intersection(l, r, b)
         calc_angle = true
         p = l
         -- ball hit right paddle
-      elseif (b.x > r.x and
+      elseif (b.x > r.x - 8 and
           b.y >= r.y - b.h and
           b.y <= r.y + r.h + b.h
         ) then
@@ -175,6 +177,14 @@ function intersection(l, r, b)
         update_ball(b)
 
         intersection(l, r, b)
+
+        if btnp(4) then
+          b.dx = -b.dx
+        end
+        if btn(5) then
+          b.y = 0
+          b.dy = -1
+        end
       end
 
       function drawshape(s)
@@ -182,13 +192,15 @@ function intersection(l, r, b)
       end
 
       function _draw()
-        cls(1)
-        set_color(12)
-        drawshape(l)
-        set_color(10)
-        drawshape(r)
-        set_color(8)
-        drawshape(b)
+        cls(0)
+
+        spr(1, floor(l.x - 4), floor(l.y))
+        spr(1 + 8, floor(l.x - 4), floor(l.y + 8))
+
+        spr(2, floor(r.x), floor(r.y))
+        spr(2 + 8, floor(r.x), floor(r.y + 8))
+
+        spr(0, floor(b.x), floor(b.y))
 
         -- draw the dotted line in
         -- the middle of the field

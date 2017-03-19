@@ -14,4 +14,6 @@ public:
     static void Flip();
     static void Cleanup();
     static void LoadFont();
+    static void HandleInput(SDL_Event e);
+    static void HandleTextInput(SDL_Event e);
 };

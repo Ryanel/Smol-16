@@ -26,3 +26,4 @@ end
 dofile("data/std/math.lua")
 dofile("data/std/memory.lua")
 dofile("data/std/graphics.lua")
+dofile("data/std/file.lua")

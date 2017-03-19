@@ -43,7 +43,16 @@ function GraphicsExporter:UpdateContent()
     end
 
     if lx > 16 and lx <= 16 + 19 then -- CART
+      print("Exporting to cart " .. cart_info.loaded_cart)
+      local filepath = cart_info.cart_path .. cart_info.loaded_cart .. "/gfx/spr0.bin"
+      local file = io.open (filepath , "wb")
+      local i = 0
+      repeat
+        file:write(string.char(peek8(0x20000 + i)))
+        i = i + 1
+      until i == 64 * 256
 
+      file:close()
     end
   end
 end

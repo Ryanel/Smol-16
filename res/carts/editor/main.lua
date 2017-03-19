@@ -32,6 +32,8 @@ function _init()
 
   editor_modes[editor_mode]:Show()
 
+  LoadCart();
+
   poke8(0x1E200 + 10, 9)
   poke8(0x1E200 + 9, 8)
   poke8(0x1E300 + 10, 12)

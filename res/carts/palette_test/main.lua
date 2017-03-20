@@ -1,7 +1,7 @@
 timer = 0
 function _init()
-  cls(0)
-  palette_reset()
+  ppu.cls(0)
+  ppu.pal_reset()
 end
 
 function _update()
@@ -20,18 +20,11 @@ function _update()
   --[[
 
   ]]
-  if (timer % 20 > 18) then
-    local last_val = peek16(0x1E000 + 32);
-    memcpy(0x0, 0x1E000,32)
-    memcpy(0x1E002, 0x0, 32)
-    poke16(0x1E000, last_val)
-
-  end
   timer = timer + 1
 end
 
-function _draw()
-  cls(0)
+function _render()
+  ppu.cls(0)
   local i = 0
   local k = 0
   local co = 0
@@ -40,7 +33,7 @@ function _draw()
     repeat
       i = 0
       repeat
-        poke8(i + 0x10000 + (k * (256 / 16)) + co * 256, k) -- Writes indexes directly to VRAM
+        ppu.poke8(i + (k * (256 / 16)) + co * 256, k) -- Writes indexes directly to VRAM
         i = i + 1
       until i == 16
       k = k + 1
@@ -50,8 +43,8 @@ function _draw()
 
   i = 0
   repeat
-    local x = (i * 8) % screenWidth
-    local y = floor((i * 8) / screenWidth)
+    local x = (i * 8) % 256
+    local y = floor((i * 8) / 256)
     set_color((i % 15) + 1)
     draw_char(i, x, 64 + (y * 8))
     i = i + 1
@@ -59,15 +52,13 @@ function _draw()
 
   set_color(8)
 
-  draw_string("Hiya there, everyone! This is Smol-16. It's a game console.",0, screenHeight - 32)
+  draw_string("Hiya there, everyone! This is Smol-16. It's a game console.",0, 224 - 32)
 
   set_color(7)
-  draw_string("HIYA THERE, EVERYONE! THIS IS SMOL-16. IT'S A GAME CONSOLE.",0, screenHeight - 48)
+  draw_string("HIYA THERE, EVERYONE! THIS IS SMOL-16. IT'S A GAME CONSOLE.",0, 224 - 48)
 
   set_color(10)
-  draw_string("hiya there, everyone! this is smol-16. it's a game console.",0, screenHeight - 64)
+  draw_string("hiya there, everyone! this is smol-16. it's a game console.",0, 224 - 64)
 
-  set_color(7)
-  draw_string("CPU: "..stat_cpu() .. "%", 8, 224 - 8)
   flip()
 end

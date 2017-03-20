@@ -23,7 +23,7 @@ local cpu_adverage_index = 0
 local cpu_adverage_samples = 30
 
 function _init()
-  palette_reset()
+  ppu.pal_reset()
 
   editor_modes[0] = EditorCart(0, "Cart")
   editor_modes[1] = EditorGraphics(1, "Graphics")
@@ -34,10 +34,10 @@ function _init()
 
   LoadCart();
 
-  poke8(0x1E200 + 10, 9)
-  poke8(0x1E200 + 9, 8)
-  poke8(0x1E300 + 10, 12)
-  poke8(0x1E300 + 9, 13)
+  mem.poke8(0x1E200 + 10, 9)
+  mem.poke8(0x1E200 + 9, 8)
+  mem.poke8(0x1E300 + 10, 12)
+  mem.poke8(0x1E300 + 9, 13)
 
   local i = 0
   repeat

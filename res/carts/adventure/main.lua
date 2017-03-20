@@ -5,6 +5,6 @@ function _update()
 
 end
 
-function _draw()
+function _render()
 
 end

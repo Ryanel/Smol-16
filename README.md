@@ -12,7 +12,8 @@ Smol-16 is in early development! Be wary about using it (though do contribute an
 
 ## Technical Specifications
 * 256 x 224 pixel display (SNES resolution)
-* 256 color palette (BGR-15 programmable)
+* 256 color palette (BGR-15 programmable)]
+* 256 sprites on screen, 8x8 tiles, 4bpp (16 colors)
 * Program code is in Lua, no token limits
 * 8 channel sound, sampled at 48khz
 

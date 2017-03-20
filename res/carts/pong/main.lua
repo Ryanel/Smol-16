@@ -31,8 +31,8 @@ cart_header = {
   name = "Pong"
 }
 
-load_sample(0)
-file_load_spritesheet("carts/pong/gfx/spr0.bin")
+--load_sample(0)
+--file_load_spritesheet("carts/pong/gfx/spr0.bin")
 l = {
   x = 5,
   y = 50,
@@ -43,7 +43,7 @@ l = {
 }
 
 r = {
-  x = screenWidth - 8,
+  x = 256 - 8,
   y = 50,
   h = 24,
   score = 0,
@@ -102,12 +102,12 @@ function intersection(l, r, b)
     r.score = r.score + 1
     reset_ball(b)
     -- ball passed right paddle
-  elseif (b.x > screenWidth) then
+  elseif (b.x > 256) then
     l.score = l.score + 1
     reset_ball(b)
     -- ball hit ceiling or floor
   elseif (
-      b.y < 0 or b.y > screenHeight) then
+      b.y < 0 or b.y > 224) then
       b.dy = -b.dy
       snd_sfx(0)
       -- ball hit left paddle
@@ -166,9 +166,8 @@ function intersection(l, r, b)
       end
 
       function _init()
-        cls(1)
-        palette_reset()
-        set_color(1)
+        ppu.cls(0)
+        ppu.pal_reset()
       end
 
       function _update()
@@ -192,7 +191,7 @@ function intersection(l, r, b)
       end
 
       function _draw()
-        cls(0)
+        ppu.cls(0)
 
         spr(1, floor(l.x - 4), floor(l.y))
         spr(1 + 8, floor(l.x - 4), floor(l.y + 8))

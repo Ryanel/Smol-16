@@ -62,9 +62,7 @@ void Display::PaletteReset() {
         uint8_t cr = defaultPalette[arr_index++];
         uint8_t cg = defaultPalette[arr_index++];
         uint8_t cb = defaultPalette[arr_index++];
-
         m->Poke16(MEM_VRAM_PCT + (pal_index * 2), Color::BGR15FromRGB(cr,cg,cb));
-
     }
 }
 

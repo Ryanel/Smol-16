@@ -2,7 +2,8 @@
 #include <smol16.hpp>
 #include <memory.hpp>
 #include <ppu.hpp>
-
+#include <timer.hpp>
+#include <input.hpp>
 #ifdef BACKEND_SDL
 #include <sdl_backend.hpp>
 CBackend_SDL * sdl;
@@ -30,6 +31,9 @@ CSystem::CSystem()
     getGlobalNamespace(L)
        .beginNamespace("debug")
        .addFunction("dump_stack", &CSystem::StackDump)
+       .endNamespace()
+       .beginNamespace("cpu")
+       .addFunction("get_usage", &CSystem::Lua_GetCPU)
        .endNamespace();
    _log->debug("Lua initialised");
 }
@@ -40,6 +44,7 @@ void CSystem::Init()
 {
     _mem = CMemory::instance();
     _ppu = CPPU::instance();
+
     // We now load the STD
     LoadFile(g_config.std_path);
     // We are now ready to accept carts!
@@ -111,12 +116,34 @@ void CSystem::StackDump(lua_State *L)
     printf("\n");     /* end the listing */
 }
 
+void CSystem::CalcCPU()
+{
+    int frameTicks = fpsCapTimer.GetTicks();
+    float cpu = (float)((TICKS_PER_FRAME - frameTicks));    // > 0 == < 100% cpu
+                                                            // < 0 == > 100% cpu
+    if(cpu >= 0) {
+        float val = 16 - cpu;
+        if(val < 1) {val = 1;}
+        val = 100 / val;
+        cpu = val;
+    } else {
+        float val = abs(cpu);
+        val = val * TICKS_PER_FRAME;
+        cpu = val;
+    }
+    this->cpu = cpu;
+}
+
+float CSystem::Lua_GetCPU() {
+    return _instance->cpu;
+}
 
 void CSystem::Run()
 {
     #ifdef BACKEND_SDL
     sdl = CBackend_SDL::instance();
     #endif
+    Input * input = Input::instance();
 
     setGlobal(L,g_config.cart_path,"_cart_path");
     LoadFile(g_config.cart_path + "/main.lua");
@@ -124,8 +151,9 @@ void CSystem::Run()
     Call("_init"); // Let the cart initialise itself
 
     while(this->running) {
-        // TODO: Start FPS timer
-        // TODO: Update Input
+        fpsCapTimer.Start();
+
+        input->Update();
         #ifdef BACKEND_SDL
         sdl->EventLoop();
         #endif
@@ -135,6 +163,19 @@ void CSystem::Run()
         // Has the cart signaled to the console that a new frame is ready?
         // Let the PPU figure this out
         _ppu->DoRender();
+
+        int frameTicks = fpsCapTimer.GetTicks();
+        float margin = TICKS_PER_FRAME - frameTicks;
+        if( frameTicks <= TICKS_PER_FRAME ) {
+            #ifdef BACKEND_SDL
+            SDL_Delay( TICKS_PER_FRAME - frameTicks );
+            #endif
+        }
+        else {
+            margin = abs(margin);
+        }
+
+        CalcCPU();
     }
 
     if (g_config.enableDebugging)

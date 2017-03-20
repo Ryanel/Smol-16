@@ -44,7 +44,7 @@ end
 function SpriteEditor:UpdateContent()
   local inBounds = self:InBounds(mouse.x, mouse.y) and self.panel_global.being_dragged == nil
   if inBounds then
-    if btn(9) and mouse.y - self.y > 8 then
+    if io.btn(9) and mouse.y - self.y > 8 then
       self:PutPixel()
     end
   end
@@ -55,11 +55,11 @@ function SpriteEditor:DoWindowScale()
   local inBounds = self:InBounds(mouse.x, mouse.y) and self.panel_global.being_dragged == nil
 
   if inBounds then
-    if(btnp(5)) then
+    if(io.btnp(5)) then
       self.zoom_level = self.zoom_level + 1
       if(zooms[self.zoom_level] == nil) then self.zoom_level = self.zoom_level - 1 end
     end
-    if(btnp(4)) then
+    if(io.btnp(4)) then
       self.zoom_level = self.zoom_level - 1
       if(zooms[self.zoom_level] == nil) then self.zoom_level = self.zoom_level + 1 end
     end

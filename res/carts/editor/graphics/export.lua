@@ -19,7 +19,7 @@ function GraphicsExporter:DrawContent()
 end
 
 function GraphicsExporter:UpdateContent()
-  if btnp(9) and self:InBounds(mouse.x, mouse.y) then
+  if io.btnp(9) and self:InBounds(mouse.x, mouse.y) then
     local lx = mouse.x - self.x
     if lx <= 16 then -- LUA
       print("==========BEGIN EXPORT==========")

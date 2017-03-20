@@ -1,8 +1,8 @@
 #include <cstring>
 #include <string>
-#include <color.h>
-#include <smol/input.h>
-#include <smol/smol16.h>
+#include <color.hpp>
+#include <input.hpp>
+#include <smol16.hpp>
 #include <SDL.h>
 Input * Input::m_instance;
 std::string Input::input_text;
@@ -14,16 +14,20 @@ Input * Input::instance()
 }
 
 Input::Input() {
-    sys->Register("btn", &Input::LuaGetBtnDown);
-    sys->Register("btnp", &Input::LuaGetBtnPress);
-    sys->Register("_get_mouse_x", &Input::LuaGetMouseX);
-    sys->Register("_get_mouse_y", &Input::LuaGetMouseY);
-    sys->Register("text_start", &Input::LuaEnableTextInput);
-    sys->Register("text_end", &Input::LuaDisableTextInput);
-    sys->Register("text_get", &Input::LuaGetTextInput);
-    sys->Register("text_flush", &Input::LuaFlushTextInput);
-    sys->Register("text_flushf", &Input::LuaFlushFullInput);
-    sys->Register("text_submit", &Input::LuaTextLastConfirm);
+    getGlobalNamespace(CSystem::instance()->L)
+   .beginNamespace("io")
+       .addFunction("btn", &Input::LuaGetBtnDown)
+       .addFunction("btnp", &Input::LuaGetBtnPress)
+       .addFunction("mouse_x", &Input::LuaGetMouseX)
+       .addFunction("mouse_y", &Input::LuaGetMouseY)
+       .addFunction("text_start", &Input::LuaEnableTextInput)
+       .addFunction("text_end", &Input::LuaDisableTextInput)
+       .addFunction("text_get", &Input::LuaGetTextInput)
+       .addFunction("text_flush", &Input::LuaFlushTextInput)
+       .addFunction("text_flushf", &Input::LuaFlushFullInput)
+       .addFunction("text_submit", &Input::LuaTextLastConfirm)
+   .endNamespace();
+
 }
 
 // Is the button down NOW?
@@ -60,11 +64,11 @@ bool Input::LuaGetBtnPress(int code) {
 }
 
 int Input::LuaGetMouseX() {
-    return instance()->mouseX / Display::scale;
+    return instance()->mouseX / CPPU::instance()->display_scale;
 }
 
 int Input::LuaGetMouseY() {
-    return instance()->mouseY / Display::scale;
+    return instance()->mouseY / CPPU::instance()->display_scale;
 }
 
 bool Input::LuaGetMouseBtn1() {

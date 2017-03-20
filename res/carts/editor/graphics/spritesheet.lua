@@ -59,20 +59,20 @@ function SpriteSheetEditor:UpdateContent()
   local inBounds = self:InBounds(mouse.x, mouse.y) and self.panel_global.being_dragged == nil
   if inBounds then
     --Spritesheet scrolling
-    if btn(0) then
+    if io.btn(0) then
       self.scroll_index = self.scroll_index - 1
     end
-    if btn(2) then
+    if io.btn(2) then
       self.scroll_index = self.scroll_index + 1
     end
     if self.scroll_index < 0 then self.scroll_index = 0 end
     if self.scroll_index > 30 then self.scroll_index = 30 end
-    if btn(9) and mouse.y - self.y > 8 then
+    if io.btn(9) and mouse.y - self.y > 8 then
       local my = (mouse.y - (self.y + (8)))
       local sel_x = floor((mouse.x - self.x) / floor(self.w / 8))
       local sel_y = floor(my / 8) + self.scroll_index
       local sel_sprite = sel_y * floor(self.w / 8) + sel_x
-      if btn(4) then -- Multiselect
+      if io.btn(4) then -- Multiselect
         if(sel_sprite == sprite_editor_ctx.selected_sprite + 1) then
           sprite_editor_ctx.selected_sprite_width = 2
         end

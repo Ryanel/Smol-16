@@ -44,7 +44,7 @@ end
 
 function Panel:Update()
   local inBounds = self:InBounds(mouse.x, mouse.y)
-  if btnp(9) and mouse.y - self.y <= 8 and inBounds then -- If we're clicking on the titlebar
+  if io.btnp(9) and mouse.y - self.y <= 8 and inBounds then -- If we're clicking on the titlebar
     if(mouse.x >= self.x + self.w - 8 and self.minimisable) then -- Minimise
       if self.minimised then
         self.minimised = false
@@ -120,7 +120,7 @@ end
 
 function Panel:DragTitleBar()
   if(self.no_chrome) then return end -- Nothing to drag, abort.
-  if btn(9) and self:InBounds(mouse.x, mouse.y) then
+  if io.btn(9) and self:InBounds(mouse.x, mouse.y) then
     -- Determine if we're on the title bar
     if mouse.y - self.y < 8 and (self.panel_global.being_dragged == nil or self.panel_global.being_dragged == self) then
       if self.dragging_is == false then

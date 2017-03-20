@@ -19,6 +19,11 @@ private:
     CBackend_SDL * sdl;
     #endif
 public:
+
+    static const int width = 256;
+    static const int height = 224;
+
+    int display_scale = 3;
     color_t * pixel_buffer;
     static CPPU * instance();
     void Init();

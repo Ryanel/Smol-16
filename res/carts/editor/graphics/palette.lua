@@ -44,7 +44,7 @@ end
 function Palette:UpdateContent()
   local inBounds = self:InBounds(mouse.x, mouse.y)
   if inBounds then
-    if btn(9) then
+    if io.btn(9) then
       local pal_y = self.y
       if(not self.no_chrome) then pal_y = pal_y + 8 end
       local pal_x = floor((mouse.x) / 4)

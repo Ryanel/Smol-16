@@ -7,6 +7,7 @@ class CPPU;
 #include <SDL_image.h>
 #include <smol16.hpp>
 #include <ppu.hpp>
+#include <input.hpp>
 CBackend_SDL * CBackend_SDL::_instance = NULL;
 
 SDL_Window   * CBackend_SDL::win      = NULL;
@@ -57,7 +58,7 @@ void CBackend_SDL::EventLoop() {
             //HandleTextInput(e);
             break;
         }
-        //HandleInput(e);
+        HandleInput(e);
     }
 }
 
@@ -73,6 +74,35 @@ void CBackend_SDL::Render(color_t *ppu) {
     SDL_RenderCopy(ren, display, NULL, NULL);
     SDL_RenderPresent(ren);
 }
+
+
+void CBackend_SDL::HandleTextInput(SDL_Event ev)
+{
+    SDL_Event e = ev;
+    if(!(( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) &&
+        ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) &&
+            SDL_GetModState() & KMOD_CTRL ) ) {
+        //Append character
+        Input::input_text += e.text.text;
+    }
+}
+
+void CBackend_SDL::HandleInput(SDL_Event ev) {
+    Input * input = Input::instance();
+    input->SetButton(BUTTON_UP, keys[SDL_SCANCODE_UP]);
+    input->SetButton(BUTTON_RIGHT, keys[SDL_SCANCODE_RIGHT]);
+    input->SetButton(BUTTON_DOWN, keys[SDL_SCANCODE_DOWN]);
+    input->SetButton(BUTTON_LEFT, keys[SDL_SCANCODE_LEFT]);
+    input->SetButton(BUTTON_A, keys[SDL_SCANCODE_Z]);
+    input->SetButton(BUTTON_B, keys[SDL_SCANCODE_X]);
+    input->SetButton(BUTTON_X, keys[SDL_SCANCODE_A]);
+    input->SetButton(BUTTON_Y, keys[SDL_SCANCODE_S]);
+    input->SetButton(BUTTON_LMB, (SDL_GetMouseState(&input->mouseX,
+                     &input->mouseY) & SDL_BUTTON(SDL_BUTTON_LEFT)) > 0);
+
+    if(keys[SDL_SCANCODE_RETURN]) { Input::lastchar_submit = true;}
+}
+
 
 void CBackend_SDL::LoadFont() {
     SDL_Surface* loadedSurface = IMG_Load( "data/font.png" );

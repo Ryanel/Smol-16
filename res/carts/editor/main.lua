@@ -41,7 +41,7 @@ function _init()
 
   local i = 0
   repeat
-    cpu_adverage[i] = stat_cpu()
+    cpu_adverage[i] = cpu.get_usage()
     i = i + 1
   until i == cpu_adverage_samples
 end
@@ -57,15 +57,15 @@ function _update()
   global_timer = global_timer + 1
 
   -- Update CPU Adverage
-  cpu_adverage[cpu_adverage_index] = stat_cpu()
+  cpu_adverage[cpu_adverage_index] = cpu.get_usage()
   cpu_adverage_index = cpu_adverage_index + 1
   if(cpu_adverage_index == cpu_adverage_samples) then
     cpu_adverage_index = 0
   end
 end
 
-function _draw()
-  cls(editor.background_color)
+function _render()
+  ppu.cls(editor.background_color)
   draw_windows()
   mouse:draw()
   draw_cpu()

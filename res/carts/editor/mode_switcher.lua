@@ -121,7 +121,7 @@ end
 
 function ModeSwitcher:UpdateContent()
 
-  if btnp(9) and self:InBounds(mouse.x, mouse.y) then
+  if io.btnp(9) and self:InBounds(mouse.x, mouse.y) then
     local mode_to_switch = floor(mouse.x / 8) - 1
     if(editor_modes[mode_to_switch] == nil) then return end
 

@@ -35,8 +35,8 @@ function Mouse:draw()
 end
 
 function Mouse:update()
-  self.x = _get_mouse_x()
-  self.y = _get_mouse_y()
+  self.x = io.mouse_x()
+  self.y = io.mouse_y()
 end
 
 mouse = Mouse()

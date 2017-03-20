@@ -8,6 +8,7 @@
 #include <sys_config.hpp>
 // Smol16
 #include <smol16.hpp>
+#include <input.hpp>
 #ifdef BACKEND_SDL
 #include <sdl_backend.hpp>
 #endif
@@ -23,7 +24,7 @@ int main(int argc, char *argv[])
     ProcessArgs(argc, argv);
     // Now initialise the System
     CSystem *app = CSystem::instance();
-
+    Input::instance();
     // Now, lets init based on the arguments
     if (!g_config.noGraphics)
     {

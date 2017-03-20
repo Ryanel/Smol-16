@@ -21,7 +21,6 @@ public:
     void Cleanup();
     void LoadFont();
 
-
 };
 
 #endif

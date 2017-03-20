@@ -5,10 +5,12 @@ This is parsed before a cart is loaded. All functions here are avalable for use.
 
 _std_version = 1
 
-function console_log(message)
+function console_log(message, name)
   local header_name = ""
   if(cart_header ~= nil) then header_name = cart_header.name
-  else header_name = "Cart" end
+  else
+    header_name = name or "Cart"
+  end
   print("["..header_name.."]: ".. message)
 end
 
@@ -27,3 +29,5 @@ dofile("data/std/math.lua")
 dofile("data/std/memory.lua")
 dofile("data/std/graphics.lua")
 dofile("data/std/file.lua")
+
+console_log("Loaded all files", "STD")

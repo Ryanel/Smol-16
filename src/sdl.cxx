@@ -1,61 +1,80 @@
-#include <SDL.h>
+#include <config.h>
+#include <sys_config.hpp>
+class CPPU;
+#ifdef BACKEND_SDL
+#include <sdl_backend.hpp>
+#include "SDL.h"
 #include <SDL_image.h>
-#include <stdio.h>
-#include <string>
-#include <render_sdl.h>
-#include <smol/display.h>
-#include <smol/smol16.h>
-#include <smol/input.h>
-#include <cstring>
+#include <smol16.hpp>
+#include <ppu.hpp>
+CBackend_SDL * CBackend_SDL::_instance = NULL;
 
-SDL_Window   *SDLRenderer::win;
-SDL_Renderer *SDLRenderer::ren;
-SDL_Texture  *SDLRenderer::display;
-std::shared_ptr<spdlog::logger> SDLRenderer::_logger;
+SDL_Window   * CBackend_SDL::win      = NULL;
+SDL_Renderer * CBackend_SDL::ren      = NULL;
+SDL_Texture  * CBackend_SDL::display  = NULL;
 
 uint8_t GetFromBuffer(uint32_t * buf, int x, int y, int width) {
     return buf[y * width + x];
 }
 
-void SDLRenderer::Init() {
-    _logger = spdlog::get("sdl");
+CBackend_SDL * CBackend_SDL::instance()
+{
+   if(!_instance) {
+       _instance = new CBackend_SDL ();
+   }
+   return _instance;
+}
+
+CBackend_SDL::CBackend_SDL() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0){
-		_logger->error("Failed to init SDL");
         exit(1);
-	}
-	win = SDL_CreateWindow("Smol-16", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        Display::width * Display::scale, Display::height * Display::scale,
+    }
+    Init();
+}
+
+void CBackend_SDL::Init() {
+    if(g_config.noGraphics) {return;}
+    win = SDL_CreateWindow("Smol16", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+        g_config.window_width, g_config.window_height,
         SDL_WINDOW_SHOWN);
     ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
-    display = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, Display::width, Display::height);
+    display = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, 256, 224);
     SDL_ShowCursor(SDL_DISABLE);
-
-    _logger->info("Initialised");
-
 }
 
-void SDLRenderer::Cleanup() {
-    SDL_DestroyRenderer(ren);
-    SDL_DestroyWindow(win);
-    SDL_Quit();
+const uint8_t *keys;
+
+void CBackend_SDL::EventLoop() {
+    keys = SDL_GetKeyboardState(NULL);
+    //Input * input = Input::instance();
+    SDL_Event e;
+    while (SDL_PollEvent(&e) == 1){
+        switch (e.type) {
+        case SDL_QUIT:
+            CSystem::instance()->running = false;
+            break;
+        case SDL_TEXTINPUT:
+            //HandleTextInput(e);
+            break;
+        }
+        //HandleInput(e);
+    }
 }
 
-void SDLRenderer::Flip() {
+void CBackend_SDL::Render(color_t *ppu) {
+    if(g_config.noGraphics) {return;}
     SDL_RenderClear(ren);
-
-    Display * d = Display::instance();
-    color_t * data = d->Render();
     int pitch;
     void* pixels;
     SDL_LockTexture(display, NULL, &pixels, &pitch );
-    memcpy(pixels, data ,Display::width * Display::height * sizeof(color_t));
+    memcpy(pixels, ppu ,256 * 224 * sizeof(color_t));
     SDL_UnlockTexture( display );
 
     SDL_RenderCopy(ren, display, NULL, NULL);
     SDL_RenderPresent(ren);
 }
 
-void SDLRenderer::LoadFont() {
+void CBackend_SDL::LoadFont() {
     SDL_Surface* loadedSurface = IMG_Load( "data/font.png" );
     if( loadedSurface == NULL ) {
         printf( "Unable to load image %s! SDL_image Error: %s\n", "font.png", IMG_GetError() );
@@ -131,81 +150,10 @@ void SDLRenderer::LoadFont() {
             }
         }
     }
-    Memory * mem = Memory::instance();
+    CPPU * ppu = CPPU::instance();
     for (uint32_t i = 0; i < index; i++) {
-        mem->Poke8(MEM_VRAM_FONT + i, buffer[i]);
-    }
-    _logger->info("Font loaded from data/font.png");
-}
-
-bool hasPressedKeyPlus = false;
-bool hasPressedKeyMinus = false;
-const uint8_t *keys;
-void SDLRenderer::EventLoop() {
-    keys = SDL_GetKeyboardState(NULL);
-    Input * input = Input::instance();
-    SDL_Event e;
-    while (SDL_PollEvent(&e) == 1){
-        switch (e.type) {
-        case SDL_QUIT:
-            sys->isRunning = false;
-            break;
-        case SDL_TEXTINPUT:
-            HandleTextInput(e);
-            break;
-        }
-        HandleInput(e);
+        ppu->Poke8(0xF000 + i, buffer[i]);
     }
 }
 
-void SDLRenderer::HandleTextInput(SDL_Event ev)
-{
-    SDL_Event e = ev;
-    if(!(( e.text.text[ 0 ] == 'c' || e.text.text[ 0 ] == 'C' ) &&
-        ( e.text.text[ 0 ] == 'v' || e.text.text[ 0 ] == 'V' ) &&
-            SDL_GetModState() & KMOD_CTRL ) ) {
-        //Append character
-        Input::input_text += e.text.text;
-    }
-}
-
-void SDLRenderer::HandleInput(SDL_Event ev) {
-    Input * input = Input::instance();
-    input->SetButton(BUTTON_UP, keys[SDL_SCANCODE_UP]);
-    input->SetButton(BUTTON_RIGHT, keys[SDL_SCANCODE_RIGHT]);
-    input->SetButton(BUTTON_DOWN, keys[SDL_SCANCODE_DOWN]);
-    input->SetButton(BUTTON_LEFT, keys[SDL_SCANCODE_LEFT]);
-    input->SetButton(BUTTON_A, keys[SDL_SCANCODE_Z]);
-    input->SetButton(BUTTON_B, keys[SDL_SCANCODE_X]);
-    input->SetButton(BUTTON_X, keys[SDL_SCANCODE_A]);
-    input->SetButton(BUTTON_Y, keys[SDL_SCANCODE_S]);
-    input->SetButton(BUTTON_LMB, (SDL_GetMouseState(&input->mouseX,
-                     &input->mouseY) & SDL_BUTTON(SDL_BUTTON_LEFT)) > 0);
-
-    if(keys[SDL_SCANCODE_BACKSPACE] && (Input::input_text.length() != 0)) {
-        Input::input_text.pop_back();
-    }
-    if(keys[SDL_SCANCODE_RETURN]) { Input::lastchar_submit = true;}
-
-    if(keys[SDL_SCANCODE_KP_PLUS]) {
-        if(!hasPressedKeyPlus) {
-            Display::scale++;
-            SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
-            hasPressedKeyPlus = true;
-        }
-    }
-    else {
-        hasPressedKeyPlus = false;
-    }
-
-    if(keys[SDL_SCANCODE_KP_MINUS]) {
-        if(!hasPressedKeyMinus) {
-            if(Display::scale > 1) {Display::scale--;}
-            SDL_SetWindowSize(win,Display::width * Display::scale, Display::height * Display::scale);
-            hasPressedKeyMinus = true;
-        }
-    }
-    else {
-        hasPressedKeyMinus = false;
-    }
-}
+#endif

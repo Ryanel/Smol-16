@@ -4,18 +4,18 @@ mem_videoregs = 0x1FF00
 -- Draws to the screen, and blocks if nb = 0
 function flip(nb)
   if not nb then nb = 0 end
-  poke8(mem_videoregs + 0x00, 0xFF)
+  ppu.poke8(mem_videoregs + 0x00, 0xFF)
   if nb then return end -- Nonblocking
   repeat
-  until peek8(mem_videoregs + 0x00) == 0x0 -- Blocking
+  until ppu.peek8(mem_videoregs + 0x00) == 0x0 -- Blocking
 end
 
 function set_pixel(x, y, c)
   if(c == 0) then return end
   if (c == nil) then
-    c = peek8(mem_videoregs + 0x50)
+    c = ppu.peek8(mem_videoregs + 0x50)
   end
-  gfx_hw_pix(x,y,c)
+  ppu.pixel(x,y,c)
 end
 
 function color(c)
@@ -23,14 +23,14 @@ function color(c)
 end
 
 function set_color(c)
-  poke8(mem_videoregs + 0x50, c)
+  ppu.poke8(mem_videoregs + 0x50, c)
 end
 
 -- Drawing functions
 
 function gfx_rect(x0, y0, x1, y1, c)
-  if not c then c = peek8(mem_videoregs + 0x50) end
-  gfx_hw_rect(x0,y0,x1,y1,c)
+  if not c then c = ppu.peek8(mem_videoregs + 0x50) end
+  ppu.rect(x0,y0,x1,y1,c)
 end
 
 function draw_line(x0, y0, x1, y1)
@@ -89,10 +89,10 @@ function draw_char(c, drawx, drawy, rel_size)
   local sprite_y = 0
   repeat
     repeat
-      local location = 0x1F000 + (c * 3) + floor(sprite_y / 2)
+      local location = 0xF000 + (c * 3) + floor(sprite_y / 2)
       local index = sprite_x
       if (sprite_y % 2) == 1 then index = index + 4 end
-      if hasbit(peek8(location), bit(index)) then
+      if hasbit(ppu.peek8(location), bit(index)) then
         local scaled_x = sprite_x * rel_size
         local scaled_y = sprite_y * rel_size
         gfx_rect(scaled_x + drawx, scaled_y + drawy, scaled_x + drawx + rel_size, scaled_y + drawy + rel_size)
@@ -120,10 +120,10 @@ function spr(num, dx0, dy0, width, height, flip_x, flip_y ,pal)
   local sy1 = 8 * height
   repeat
     repeat
-      local pix = peek8(0x20000 + (num * 64) + (sy0 * sy1) + sx0)
+      local pix = ppu.peek8(0x10000 + (num * 64) + (sy0 * sy1) + sx0)
 
       if (pal ~= -1) then
-        pix = peek8(0x1E200 + (pal * 256) + pix)
+        pix = ppu.peek8(0xE200 + (pal * 256) + pix)
       end
 
       set_pixel(sx0 + dx0, sy0 + dy0, pix)
@@ -156,9 +156,9 @@ function spr_array(sprite, dx0, dy0)
 end
 
 function spr_set(num, x, y, c)
-  poke8(0x20000 + (num * 64) + (8 * y) + x, c)
+  ppu.poke8(0x10000 + (num * 64) + (8 * y) + x, c)
 end
 
 function spr_get(num, x, y)
-  return peek8(0x20000 + (num * 64) + (8 * y) + x)
+  return ppu.peek8(0x10000 + (num * 64) + (8 * y) + x)
 end

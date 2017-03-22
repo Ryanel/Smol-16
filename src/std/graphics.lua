@@ -1,5 +1,4 @@
-mem_vram = 0x10000
-mem_videoregs = 0x1FF00
+mem_videoregs = 0xFF00
 
 -- Draws to the screen, and blocks if nb = 0
 function flip(nb)
@@ -121,11 +120,11 @@ function spr(num, dx0, dy0, width, height, flip_x, flip_y ,pal)
   repeat
     repeat
       local pix = ppu.peek8(0x10000 + (num * 64) + (sy0 * sy1) + sx0)
-
+      --[[
       if (pal ~= -1) then
         pix = ppu.peek8(0xE200 + (pal * 256) + pix)
       end
-
+      ]]
       set_pixel(sx0 + dx0, sy0 + dy0, pix)
       sx0 = sx0 + 1
     until sx0 == sx1

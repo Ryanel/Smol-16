@@ -4,7 +4,8 @@ function file_load_spritesheet(filepath)
   local i = 0
   repeat
     local dat = file:read(1)
-    poke8(sys_mem_layout.vram + i,string.byte(dat))
+    if dat == nil then break end
+    ppu.poke8(i + 0x10000, string.byte(dat))
     i = i + 1
   until i == 64 * 256
   file:close()
@@ -16,7 +17,7 @@ function sys_load_palette(file_path)
   local i = 0
   repeat
     local dat = file:read(2)
-    poke16(sys_mem_layout.pct + i * 2,string.byte(dat))
+    ppu.poke16(0xE000 + i * 2,string.byte(dat))
     i = i + 1
   until i == 256
   file:close()

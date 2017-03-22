@@ -48,7 +48,7 @@ function GraphicsExporter:UpdateContent()
       local file = io.open (filepath , "wb")
       local i = 0
       repeat
-        file:write(string.char(peek8(0x20000 + i)))
+        file:write(string.char(ppu.peek8(0x10000 + i)))
         i = i + 1
       until i == 64 * 256
 

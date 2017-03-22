@@ -5,7 +5,7 @@ local zoom_1b2 = {2, 4, 4, 6, 6, 8, 8, 10, 10, 12, 12, 14}
 local zoom_2b2 = {2, 4, 4, 6, 6, 8, 8, 10, 10, 12, 12, 14}
 function SpriteEditor:new()
   SpriteEditor.super:new()
-  self.zoom_level = 3
+  self.zoom_level = 6
   self:SetBounds(96, 32, 64, 128 + 8)
 
   self.title = "Sprite Editor"
@@ -91,6 +91,9 @@ function SpriteEditor:PutPixel()
   local my = (mouse.y - (self.y + 8))
   local sel_x = floor((mouse.x - self.x) / scale_x)
   local sel_y = floor(my / scale_y)
+
+  if sel_x > sw - 1 then return end -- Keep in bounds
+  if sel_y > sh - 1 then return end -- Keep in bounds
 
   local cur_sprite = sprite_editor_ctx.selected_sprite + floor(sel_x / 8) + ((floor(sel_y / 8) * 8))
   spr_set(cur_sprite, sel_x % 8 , sel_y % 8, sprite_editor_ctx.selected_color)

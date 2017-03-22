@@ -1,6 +1,6 @@
 sys_mem_layout = {
-  vram = 0x10000,
-  pct = 0x1E000
+  vram = 0x0,
+  pct = 0xE000
 }
 
 function memcpy(dest, src, len)

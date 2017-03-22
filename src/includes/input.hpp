@@ -5,21 +5,21 @@
 #include <cstring>
 #include <string>
 
-#define BUTTON_UP 0
-#define BUTTON_RIGHT 1
-#define BUTTON_DOWN 2
-#define BUTTON_LEFT 3
-#define BUTTON_A 4
-#define BUTTON_B 5
-#define BUTTON_X 6
-#define BUTTON_Y 7
-#define BUTTON_START 8
-#define BUTTON_LMB 9
-#define NUM_BUTTONS 10
+#define BUTTON_UP       0
+#define BUTTON_RIGHT    1
+#define BUTTON_DOWN     2
+#define BUTTON_LEFT     3
+#define BUTTON_A        4
+#define BUTTON_B        5
+#define BUTTON_X        6
+#define BUTTON_Y        7
+#define BUTTON_START    8
+#define BUTTON_LMB      9
+#define NUM_BUTTONS     10
 
 class Input {
 private:
-    static Input * m_instance;
+    static Input *m_instance;
 
     Input();
     bool buttonStates[NUM_BUTTONS];

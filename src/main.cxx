@@ -28,10 +28,10 @@ int main(int argc, char *argv[])
     // Now, lets init based on the arguments
     if (!g_config.noGraphics)
     {
-        #ifdef BACKEND_SDL
-        CBackend_SDL * sdl = CBackend_SDL::instance();
+#ifdef BACKEND_SDL
+        CBackend_SDL *sdl = CBackend_SDL::instance();
         sdl->LoadFont();
-        #endif
+#endif
     }
 
     app->Init();

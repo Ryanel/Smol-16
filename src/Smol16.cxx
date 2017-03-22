@@ -6,7 +6,7 @@
 #include <input.hpp>
 #ifdef BACKEND_SDL
 #include <sdl_backend.hpp>
-CBackend_SDL * sdl;
+CBackend_SDL *sdl;
 #endif
 
 
@@ -35,7 +35,7 @@ CSystem::CSystem()
        .beginNamespace("cpu")
        .addFunction("get_usage", &CSystem::Lua_GetCPU)
        .endNamespace();
-   _log->debug("Lua initialised");
+    _log->debug("Lua initialised");
 }
 
 
@@ -55,6 +55,7 @@ void CSystem::Init()
 void CSystem::LoadFile(std::string path)
 {
     int status = 0;
+
     // Load file into Lua Enviroment
     status = luaL_loadfile(L, path.c_str());
     if (status)
@@ -72,17 +73,21 @@ void CSystem::LoadFile(std::string path)
     }
 }
 
-void CSystem::Call(std::string function) {
-    LuaRef func = getGlobal (L, function.c_str());
+
+void CSystem::Call(std::string function)
+{
+    LuaRef func = getGlobal(L, function.c_str());
+
     try {
-      func ();
+        func();
     }
     catch (LuaException const& e) {
         _log->error("Error calling function {}: {}", function.c_str(), e.what());
-        StackDump(L);
-        exit(1);
+        //StackDump(L);
+        //exit(1);
     }
 }
+
 
 void CSystem::StackDump(lua_State *L)
 {
@@ -96,37 +101,47 @@ void CSystem::StackDump(lua_State *L)
         switch (t)
         {
         case LUA_TSTRING: /* strings */
-            printf("`%s'", lua_tostring(L, i));
+            printf("string --> `%s'", lua_tostring(L, i));
             break;
 
         case LUA_TBOOLEAN: /* booleans */
-            printf(lua_toboolean(L, i) ? "true" : "false");
+            printf("  bool --> %b", lua_toboolean(L, i) ? "true" : "false");
             break;
 
         case LUA_TNUMBER: /* numbers */
-            printf("%g", lua_tonumber(L, i));
+            printf("   num --> %g", lua_tonumber(L, i));
             break;
 
         default: /* other values */
-            printf("%s", lua_typename(L, t));
+            printf("    ?? --> %s", lua_typename(L, t));
             break;
         }
-        printf("  "); /* put a separator */
+        printf("\n"); /* put a separator */
     }
     printf("\n");     /* end the listing */
 }
 
+
+//! Calculate CPU usage
 void CSystem::CalcCPU()
 {
-    int frameTicks = fpsCapTimer.GetTicks();
-    float cpu = (float)((TICKS_PER_FRAME - frameTicks));    // > 0 == < 100% cpu
-                                                            // < 0 == > 100% cpu
-    if(cpu >= 0) {
+    int   frameTicks = fpsCapTimer.GetTicks();
+    float cpu        = (float)((TICKS_PER_FRAME - frameTicks)); // > 0 == < 100% cpu
+
+    // < 0 == > 100% cpu
+    if (cpu >= 0)
+    {
         float val = 16 - cpu;
-        if(val < 1) {val = 1;}
+
+        if (val < 1)
+        {
+            val = 1;
+        }
         val = 100 / val;
         cpu = val;
-    } else {
+    }
+    else
+    {
         float val = abs(cpu);
         val = val * TICKS_PER_FRAME;
         cpu = val;
@@ -134,47 +149,53 @@ void CSystem::CalcCPU()
     this->cpu = cpu;
 }
 
-float CSystem::Lua_GetCPU() {
+
+//! Lua: Get CPU usage
+float CSystem::Lua_GetCPU()
+{
     return _instance->cpu;
 }
 
+
 void CSystem::Run()
 {
-    #ifdef BACKEND_SDL
+#ifdef BACKEND_SDL
     sdl = CBackend_SDL::instance();
-    #endif
-    Input * input = Input::instance();
+#endif
+    Input *input = Input::instance();
 
-    setGlobal(L,g_config.cart_path,"_cart_path");
+    setGlobal(L, g_config.cart_path, "_cart_path");
     LoadFile(g_config.cart_path + "/main.lua");
 
     Call("_init"); // Let the cart initialise itself
 
-    while(this->running) {
+    while (this->running)
+    {
         fpsCapTimer.Start();
 
         input->Update();
-        #ifdef BACKEND_SDL
+#ifdef BACKEND_SDL
         sdl->EventLoop();
-        #endif
+#endif
         Call("_update"); // Now, we update every frame
-        Call("_render"); // And draw
+        Call("_render"); // And render
+        _ppu->DoRender();
+
         //TODO: Sample here to see if we went over our time budget. Wait a frame if needed
         // Has the cart signaled to the console that a new frame is ready?
         // Let the PPU figure this out
-        _ppu->DoRender();
-
-        int frameTicks = fpsCapTimer.GetTicks();
-        float margin = TICKS_PER_FRAME - frameTicks;
-        if( frameTicks <= TICKS_PER_FRAME ) {
-            #ifdef BACKEND_SDL
-            SDL_Delay( TICKS_PER_FRAME - frameTicks );
-            #endif
+        int   frameTicks = fpsCapTimer.GetTicks();
+        float margin     = TICKS_PER_FRAME - frameTicks;
+        if (frameTicks <= TICKS_PER_FRAME)
+        {
+#ifdef BACKEND_SDL
+            SDL_Delay(TICKS_PER_FRAME - frameTicks);
+#endif
         }
-        else {
+        else
+        {
             margin = abs(margin);
         }
-
         CalcCPU();
     }
 

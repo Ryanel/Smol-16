@@ -32,7 +32,7 @@ cart_header = {
 }
 
 --load_sample(0)
---file_load_spritesheet("carts/pong/gfx/spr0.bin")
+file_load_spritesheet("carts/pong/gfx/spr0.bin")
 l = {
   x = 5,
   y = 50,
@@ -60,13 +60,13 @@ function do_ai(p, b)
 end
 
 function update_player(p, b)
-  if (btn(0) or btn(2)) then
+  if (io.btn(0) or io.btn(2)) then
     l.ai = false
   end
 
   if (not p.ai) then
-    if (btn(0, p.player)) then p.y = p.y - 2 end
-    if (btn(2, p.player)) then p.y = p.y + 2 end
+    if (io.btn(0, p.player)) then p.y = p.y - 2 end
+    if (io.btn(2, p.player)) then p.y = p.y + 2 end
   else
     do_ai(p, b)
   end
@@ -177,10 +177,10 @@ function intersection(l, r, b)
 
         intersection(l, r, b)
 
-        if btnp(4) then
+        if io.btnp(4) then
           b.dx = -b.dx
         end
-        if btn(5) then
+        if io.btn(5) then
           b.y = 0
           b.dy = -1
         end
@@ -190,15 +190,16 @@ function intersection(l, r, b)
         gfx_rect(floor(s.x) , floor(s.y), floor(s.x+4), floor(s.y+s.h))
       end
 
-      function _draw()
+      function _render()
         ppu.cls(0)
 
         spr(1, floor(l.x - 4), floor(l.y))
         spr(1 + 8, floor(l.x - 4), floor(l.y + 8))
+        spr(1 + 16, floor(l.x - 4), floor(l.y + 16))
 
         spr(2, floor(r.x), floor(r.y))
         spr(2 + 8, floor(r.x), floor(r.y + 8))
-
+        spr(2 + 16, floor(r.x), floor(r.y + 16))
         spr(0, floor(b.x), floor(b.y))
 
         -- draw the dotted line in
@@ -213,6 +214,6 @@ function intersection(l, r, b)
         set_color(10)
         draw_string(r.score, r.x - 14, 5, 4)
         set_color(7)
-        draw_string("CPU: "..stat_cpu() .. "%", 8, 224 - 8)
+        draw_string("CPU: "..cpu.get_usage() .. "%", 8, 224 - 8)
         flip()
       end

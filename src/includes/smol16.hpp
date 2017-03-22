@@ -12,19 +12,19 @@ using namespace luabridge;
 
 class CSystem {
 private:
-    static CSystem * _instance;
+    static CSystem *_instance;
     Timer fpsCapTimer;
     std::shared_ptr<spdlog::logger> _log;
-    CMemory * _mem;
-    CPPU * _ppu;
+    CMemory *_mem;
+    CPPU *_ppu;
     CSystem();
     ~CSystem();
 public:
     lua_State *L;
-    bool paused = false;
+    bool paused  = false;
     bool running = true;
-    float cpu = 0;
-    static CSystem * instance();
+    float cpu    = 0;
+    static CSystem *instance();
     void Init();
     void CalcCPU();
     void Export();
@@ -33,6 +33,6 @@ public:
     void Call(std::string function);
 
     // Static functions
-    static void StackDump (lua_State *L);
+    static void StackDump(lua_State *L);
     static float Lua_GetCPU();
 };

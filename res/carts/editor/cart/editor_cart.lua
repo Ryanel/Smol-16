@@ -3,7 +3,7 @@ EditorCart = EditorMode:extend()
 require("cart/cart_selector.lua")
 
 cart_info = {
-  loaded_cart = "adventure",
+  loaded_cart = "pong",
   cart_path = "./carts/"
 }
 

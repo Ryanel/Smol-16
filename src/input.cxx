@@ -4,18 +4,23 @@
 #include <input.hpp>
 #include <smol16.hpp>
 #include <SDL.h>
-Input * Input::m_instance;
+Input       *Input::m_instance;
 std::string Input::input_text;
-bool Input::lastchar_submit = false;
-Input * Input::instance()
+bool        Input::lastchar_submit = false;
+Input *Input::instance()
 {
-   if(!m_instance) {m_instance = new Input();}
-   return m_instance;
+    if (!m_instance)
+    {
+        m_instance = new Input();
+    }
+    return m_instance;
 }
 
-Input::Input() {
+
+Input::Input()
+{
     getGlobalNamespace(CSystem::instance()->L)
-   .beginNamespace("io")
+       .beginNamespace("io")
        .addFunction("btn", &Input::LuaGetBtnDown)
        .addFunction("btnp", &Input::LuaGetBtnPress)
        .addFunction("mouse_x", &Input::LuaGetMouseX)
@@ -26,88 +31,122 @@ Input::Input() {
        .addFunction("text_flush", &Input::LuaFlushTextInput)
        .addFunction("text_flushf", &Input::LuaFlushFullInput)
        .addFunction("text_submit", &Input::LuaTextLastConfirm)
-   .endNamespace();
-
+       .endNamespace();
 }
+
 
 // Is the button down NOW?
-bool Input::GetButtonDown(int code) {
+bool Input::GetButtonDown(int code)
+{
     return buttonStates[code];
-
 }
+
+
 // Is the button JUST NOW down. (in buttonStates but not buttonStatesLast)
-bool Input::GetButtonPress(int code) {
-    if(buttonStates[code]) {
-        if(!buttonStatesLast[code]) {
+bool Input::GetButtonPress(int code)
+{
+    if (buttonStates[code])
+    {
+        if (!buttonStatesLast[code])
+        {
             return true;
         }
     }
     return false;
-
 }
-bool Input::SetButton(int code, bool value) {
+
+
+bool Input::SetButton(int code, bool value)
+{
     return buttonStates[code] = value;
 }
 
+
 // Cycle from buttonStates -> buttonStatesLast.
-void Input::Update() {
-    for(int i = 0; i < NUM_BUTTONS; i++) {
+void Input::Update()
+{
+    for (int i = 0; i < NUM_BUTTONS; i++)
+    {
         buttonStatesLast[i] = buttonStates[i];
     }
 }
 
-bool Input::LuaGetBtnDown(int code) {
+
+bool Input::LuaGetBtnDown(int code)
+{
     return instance()->GetButtonDown(code);
 }
-bool Input::LuaGetBtnPress(int code) {
+
+
+bool Input::LuaGetBtnPress(int code)
+{
     return instance()->GetButtonPress(code);
 }
 
-int Input::LuaGetMouseX() {
+
+int Input::LuaGetMouseX()
+{
     return instance()->mouseX / CPPU::instance()->display_scale;
 }
 
-int Input::LuaGetMouseY() {
+
+int Input::LuaGetMouseY()
+{
     return instance()->mouseY / CPPU::instance()->display_scale;
 }
 
-bool Input::LuaGetMouseBtn1() {
+
+bool Input::LuaGetMouseBtn1()
+{
     return false;
 }
 
-bool Input::LuaGetMouseBtn2() {
+
+bool Input::LuaGetMouseBtn2()
+{
     return false;
 }
 
-void Input::LuaEnableTextInput() {
+
+void Input::LuaEnableTextInput()
+{
     SDL_StartTextInput();
 }
 
 
-void Input::LuaDisableTextInput() {
+void Input::LuaDisableTextInput()
+{
     SDL_StopTextInput();
 }
 
 
-std::string Input::LuaFlushTextInput() {
+std::string Input::LuaFlushTextInput()
+{
     std::string ret = input_text;
-    input_text = "";
+    input_text      = "";
     lastchar_submit = false;
     return ret;
 }
 
-std::string Input::LuaGetTextInput() {
+
+std::string Input::LuaGetTextInput()
+{
     std::string ret = input_text;
     return ret;
 }
 
-std::string Input::LuaFlushFullInput() {
-    if(lastchar_submit == true) {
+
+std::string Input::LuaFlushFullInput()
+{
+    if (lastchar_submit == true)
+    {
         return LuaFlushTextInput();
     }
     return "";
 }
 
-bool Input::LuaTextLastConfirm() {
+
+bool Input::LuaTextLastConfirm()
+{
     return lastchar_submit;
 }

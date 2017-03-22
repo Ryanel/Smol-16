@@ -7,7 +7,7 @@ public:
     bool enableDebugging;
     bool noGraphics;
     bool standalone;
-    int window_width = 256 * 3;
+    int window_width  = 256 * 3;
     int window_height = 224 * 3;
     std::string std_path;
     void Init();

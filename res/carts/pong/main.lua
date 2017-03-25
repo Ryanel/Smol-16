@@ -27,8 +27,12 @@
 -- ai - computer controlled
 -- player - which player
 
-cart_header = {
-  name = "Pong"
+_cart_header = {
+  name = "Pong",
+  entry = "_init",
+  irq_clock = "_update",
+  irq_ppu = "_render",
+  irq_spu = "_irq_spu"
 }
 
 --load_sample(0)

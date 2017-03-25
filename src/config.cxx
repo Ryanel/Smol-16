@@ -3,7 +3,7 @@ CConfig g_config;
 
 void CConfig::Init()
 {
-    this->enableDebugging = true;
+    this->enableDebugging = false;
     this->noGraphics      = false;
     this->std_path        = "./data/std/std.lua";
 }

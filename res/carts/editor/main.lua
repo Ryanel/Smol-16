@@ -1,7 +1,11 @@
 global_timer = 0
 
-cart_header = {
-  name = "Sprite Editor"
+_cart_header = {
+  name = "Pong",
+  entry = "_init",
+  irq_clock = "_update",
+  irq_ppu = "_render",
+  irq_spu = "_irq_spu"
 }
 
 editor = {

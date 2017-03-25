@@ -9,6 +9,15 @@
 
 #include "LuaBridge.h"
 using namespace luabridge;
+struct cart_info {
+    std::string path;
+    std::string name;
+
+    std::string start;
+    std::string update;
+    std::string irq_ppu;
+    std::string irq_spu;
+};
 
 class CSystem {
 private:
@@ -24,6 +33,7 @@ public:
     bool paused  = false;
     bool running = true;
     float cpu    = 0;
+    struct cart_info loaded_cart;
     static CSystem *instance();
     void Init();
     void CalcCPU();

@@ -167,7 +167,20 @@ void CSystem::Run()
     setGlobal(L, g_config.cart_path, "_cart_path");
     LoadFile(g_config.cart_path + "/main.lua");
 
-    Call("_init"); // Let the cart initialise itself
+    // Load cart info!
+    LuaRef cart_header = getGlobal(L, "_cart_header");
+    if(cart_header.isNil()) {
+        _log->error("Cart {} has no header! Cannot run. Aborting.", g_config.cart_path);
+        exit(1);
+    }
+    loaded_cart.path = g_config.cart_path;
+    loaded_cart.name = cart_header["name"].cast<std::string>();
+    loaded_cart.start = cart_header["entry"].cast<std::string>();
+    loaded_cart.update = cart_header["irq_clock"].cast<std::string>();
+    loaded_cart.irq_ppu = cart_header["irq_ppu"].cast<std::string>();
+    loaded_cart.irq_spu = cart_header["irq_spu"].cast<std::string>();
+
+    Call(loaded_cart.start); // Let the cart initialise itself
 
     while (this->running)
     {
@@ -177,8 +190,8 @@ void CSystem::Run()
 #ifdef BACKEND_SDL
         sdl->EventLoop();
 #endif
-        Call("_update"); // Now, we update every frame
-        Call("_render"); // And render
+        Call(loaded_cart.update); // Now, we update every frame
+        Call(loaded_cart.irq_ppu); // And render
         _ppu->DoRender();
 
         //TODO: Sample here to see if we went over our time budget. Wait a frame if needed

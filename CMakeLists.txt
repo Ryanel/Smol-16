@@ -5,9 +5,30 @@ project(${PROJECTNAME})
 include(FindPkgConfig)
 include(ExternalProject)
 
-set (CXX_OPT_FLAGS "-s -fomit-frame-pointer -fno-stack-protector -fno-unroll-loops -ffast-math ")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -flto")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS} -g -pg -ggdb -Og")
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
+   ${PROJECT_BINARY_DIR}/./
+   CACHE PATH
+   "Single Directory for all Libraries"
+   )
+
+# --------- Setup the Executable output Directory -------------
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
+   ${PROJECT_BINARY_DIR}/./
+   CACHE PATH
+   "Single Directory for all Executables."
+   )
+
+# --------- Setup the Executable output Directory -------------
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+   ${PROJECT_BINARY_DIR}/./
+   CACHE PATH
+   "Single Directory for all static libraries."
+   )
+
+
+set (CXX_OPT_FLAGS "-s -fomit-frame-pointer -fno-stack-protector -fno-unroll-loops -ffast-math -flto")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-qual -Wodr")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS} -g -Og ${CXX_OPT_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS} -Os ${CXX_OPT_FLAGS}")
 # Libraries
 find_package(SDL2 REQUIRED)
@@ -16,22 +37,6 @@ find_package(SDL2_mixer REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
-
-ExternalProject_Add(project_luajit
-    URL http://luajit.org/download/LuaJIT-2.0.4.tar.gz
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND make -j4 CCOPT="-ffast-math" CCOPT+="-ffunction-sections" CCOPT+="-flto" CCOPT+="-Os"
-        CCOPT+="-fomit-frame-pointer" CCOPT+="-fno-stack-protector" CCOPT+="-fno-unroll-loops"
-    INSTALL_COMMAND ""
-    PREFIX=${CMAKE_CURRENT_BINARY_DIR}/luajit-2.0.4
-    BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}/luajit/
-    BUILD_IN_SOURCE 1
-)
-ExternalProject_Get_Property(project_luajit install_dir)
-add_library(luajit STATIC IMPORTED)
-set_property(TARGET luajit PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/project_luajit-prefix/src/project_luajit/src/libluajit.a)
-add_dependencies(luajit project_luajit)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/project_luajit-prefix/src/project_luajit/src/)
 
 # Includes
 include_directories("${PROJECT_SOURCE_DIR}/lib/spdlog/include/")
@@ -60,7 +65,6 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/carts_fake.h POST_BUILD
                ${CMAKE_SOURCE_DIR}/res/carts/ $<TARGET_FILE_DIR:${PROJECTNAME}>/carts/)
 
 # Project
-file(GLOB SOURCES "src/*.cxx")
+#add_executable(${PROJECTNAME} ${SOURCES})
 
-add_executable(${PROJECTNAME} ${SOURCES})
-target_link_libraries(${PROJECTNAME} m dl luajit ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDLMIXER_LIBRARY})
+add_subdirectory(${PROJECT_SOURCE_DIR}/src)

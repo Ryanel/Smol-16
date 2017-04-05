@@ -3,7 +3,7 @@
 * Ram: 128kb
 * Screen: 256x224px (32 x 28 cells). Each cell has it's own pallete (16 colors).
 * Layers: LY1, LY2, LY3, SPRITE
-* Sprites: 8x8 -> 64x64, 128 simultainous. Sprites limited to 1 color
+* Sprites: 8x8 -> 64x64, 128 simultainous. Sprites limited to 16 colors
 * Cartsize: 1Mbit
 * Sound: 4 channels (A), 64 tones (B). (AABBBBBB)
 * Input

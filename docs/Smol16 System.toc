@@ -1,0 +1,48 @@
+\contentsline {section}{\numberline {1}Introduction}{1}
+\contentsline {subsection}{\numberline {1.1}History}{1}
+\contentsline {subsection}{\numberline {1.2}Model}{1}
+\contentsline {subsection}{\numberline {1.3}Hardware}{1}
+\contentsline {section}{\numberline {2}Features}{1}
+\contentsline {section}{\numberline {3}The CPU}{1}
+\contentsline {subsection}{\numberline {3.1}Registers}{1}
+\contentsline {subsection}{\numberline {3.2}Interrupts}{1}
+\contentsline {subsection}{\numberline {3.3}Instructions}{2}
+\contentsline {subsubsection}{\numberline {3.3.1}Opcode}{2}
+\contentsline {subsubsection}{\numberline {3.3.2}Conditionals}{2}
+\contentsline {subsubsection}{\numberline {3.3.3}Registers}{2}
+\contentsline {subsubsection}{\numberline {3.3.4}Literal Operands}{3}
+\contentsline {subsection}{\numberline {3.4}ALU}{3}
+\contentsline {section}{\numberline {4}PPU}{3}
+\contentsline {subsection}{\numberline {4.1}Address Space}{4}
+\contentsline {subsection}{\numberline {4.2}Drawing}{4}
+\contentsline {subsection}{\numberline {4.3}Registers}{4}
+\contentsline {subsection}{\numberline {4.4}Video RAM}{4}
+\contentsline {subsection}{\numberline {4.5}PCT}{4}
+\contentsline {subsubsection}{\numberline {4.5.1}Color format}{4}
+\contentsline {subsubsection}{\numberline {4.5.2}Index format}{5}
+\contentsline {subsection}{\numberline {4.6}Screen Palette Table}{5}
+\contentsline {subsection}{\numberline {4.7}Sprites}{5}
+\contentsline {subsubsection}{\numberline {4.7.1}Sprite Palette Table}{5}
+\contentsline {subsubsection}{\numberline {4.7.2}Sprite Data Table}{5}
+\contentsline {subsection}{\numberline {4.8}Layers}{6}
+\contentsline {section}{\numberline {5}SPU}{6}
+\contentsline {subsection}{\numberline {5.1}Channels}{6}
+\contentsline {subsubsection}{\numberline {5.1.1}Effects}{6}
+\contentsline {subsection}{\numberline {5.2}PCM Samples}{6}
+\contentsline {subsection}{\numberline {5.3}Sound Effects}{6}
+\contentsline {section}{\numberline {6}Memory}{6}
+\contentsline {subsection}{\numberline {6.1}Banks}{6}
+\contentsline {subsection}{\numberline {6.2}Address Space}{6}
+\contentsline {section}{\numberline {7}Input}{6}
+\contentsline {subsection}{\numberline {7.1}Controller}{6}
+\contentsline {subsection}{\numberline {7.2}Mouse}{6}
+\contentsline {section}{\numberline {8}Carts}{6}
+\contentsline {subsection}{\numberline {8.1}Header}{6}
+\contentsline {subsection}{\numberline {8.2}Data}{6}
+\contentsline {subsection}{\numberline {8.3}IO}{6}
+\contentsline {section}{\numberline {9}Graphics Backends}{6}
+\contentsline {subsection}{\numberline {9.1}None}{6}
+\contentsline {subsection}{\numberline {9.2}SDL}{7}
+\contentsline {section}{\numberline {10}Instruction Set}{7}
+\contentsline {section}{\numberline {11}Glossary}{7}
+\contentsline {section}{\numberline {12}Credits}{7}

@@ -10,3 +10,5 @@
 #define MEMORY_BOUNDS_CHECKS true
 
 #define BACKEND_SDL
+
+#define ERROR_PEDANTIC

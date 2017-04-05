@@ -23,12 +23,4 @@ void ProcessArgs(int argc, char *argv[])
     {
         g_config.noGraphics = true;
     }
-    if (options.count("input"))   // Get cart name
-    {
-        g_config.cart_path = options["input"].as<std::string>();
-    }
-    else
-    {
-        g_config.cart_path = "carts/editor";
-    }
 }

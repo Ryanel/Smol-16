@@ -9,7 +9,6 @@
 CSystem * sys;
 
 int main(int argc, char *argv[]) {
-
     // Init logging
     spdlog::set_pattern("[%n] %v");
     spdlog::set_level(spdlog::level::debug);
@@ -23,7 +22,7 @@ int main(int argc, char *argv[]) {
     sys = CSystem::instance();
     sys->Init();
 
-    for (size_t i = 0; i < 16; i++) {
+    for (size_t i = 0; i < 64; i++) {
         sys->Tick();
         if (!sys->isRunning) {
             break;

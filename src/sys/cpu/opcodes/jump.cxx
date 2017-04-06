@@ -1,7 +1,7 @@
 #include <cpu/interpreter.hpp>
 
 DEF_INS(jp) {
-    LOG_INSTRUCTION(jp);
+    LOG_INS(jp);
     bool shouldJump = false;
 
     // What kind of jump are we doing?

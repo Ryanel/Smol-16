@@ -2,6 +2,13 @@
 #include <mem/ram.hpp>
 #include <system.hpp>
 #include <cpu/cpu.hpp>
+
+#include <fstream>
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+
 CSystem *CSystem::m_instance = NULL;
 
 CSystem *CSystem::instance()
@@ -30,16 +37,21 @@ void CSystem::Init() {
     // Map system memory
     Memory_RAM * wram = new Memory_RAM(0x4000,"wram0");
     mem->Map(wram, 0x0);
-    _log->debug("Memory Mapped");
+
+    std::ifstream fin("code.bin", ios::in | ios::binary);
+
+    if ( !fin.is_open() ) {
+          exit(1);
+    }
+    char buffer[10];
+
+    int ptr = 0;
+    while(fin.good()) {
+        fin.read(buffer, 1);
+        mem->WriteByte(ptr++, buffer[0]);
+    }
+    fin.close();
     _log->info("Initialised");
-
-    mem->WriteShort(0x02, 0x01A1);
-    mem->WriteShort(0x04, 0xABCD);
-    mem->WriteShort(0x06, 0x0140);
-    mem->WriteShort(0x08, 0x0002);
-
-
-    mem->WriteShort(0x010, 0x6401);
 }
 
 void CSystem::Tick() {

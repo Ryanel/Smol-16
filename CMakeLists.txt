@@ -28,7 +28,7 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 
 set (CXX_OPT_FLAGS "-s -fomit-frame-pointer -fno-stack-protector -fno-unroll-loops -ffast-math -flto")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-qual -Wodr")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS} -g -Og ${CXX_OPT_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS} -g3 -ggdb -Og")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS} -Os ${CXX_OPT_FLAGS}")
 # Libraries
 find_package(SDL2 REQUIRED)
@@ -68,3 +68,4 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/carts_fake.h POST_BUILD
 #add_executable(${PROJECTNAME} ${SOURCES})
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/src)
+add_subdirectory(${PROJECT_SOURCE_DIR}/asm)

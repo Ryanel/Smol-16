@@ -10,9 +10,11 @@
 #define DO_CYCLES(x) cpu->cycles += x;
 #define USE_OPCODE opcode = opcode;
 
-#define LOG_INSTRUCTION(x) cpu->_log->debug("0x{0:04X}: {1}", cpu->regs[15].val,#x)
-#define LOG_INSTRUCTION_OP1(x, y) cpu->_log->debug("0x{0:04X}: {1} 0x{2:04}", cpu->regs[15].val,#x, y)
-#define LOG_INSTRUCTION_REG_OP1(x,r,y)  cpu->_log->debug("0x{0:04X}: {1:s} r{2:d}, 0x{3:04x}", cpu->regs[15].val,#x, r, y)
+#define LOG_INS(op) cpu->_log->debug("{0:04X}: {1}", cpu->regs[15].val, #op)
+#define LOG_INS_1OP(op, val, type) cpu->_log->debug("{0:04X}: {1:s} {2:s}{3:04x}", cpu->regs[15].val,#op,#val,#type)
+#define LOG_INS_REG_1OP(op, reg, val, type) cpu->_log->debug("{0:04X}: {1:s} r{2:<2d}, {4:s}{3:04x}", cpu->regs[15].val, #op,reg,val,type)
+#define LOG_INS_2REG(op, reg1, reg2) cpu->_log->debug("{0:04X}: {1:s} r{2:<2d}, r{3:<2d}", cpu->regs[15].val, #op,reg1,reg2)
+
 
 #define OPCODE_FLAG_EQ 0
 #define OPCODE_FLAG_NE 1
@@ -33,8 +35,3 @@
 
 #define OPCODE_FLAG_ADDRESS 0
 #define OPCODE_FLAG_LITERAL 1
-
-PRO_INS(unknown);
-PRO_INS(nop);
-PRO_INS(hlt);
-PRO_INS(jp);
